@@ -66,16 +66,29 @@ public class common {
                     String[] namesToDelete = common.SQLquery(query, empty, columnToDelete, false, -1, null);
                     updatedStatus = "voting"; //possible bug here if the date passes and then it does not update
                     for (String nameToDelete : namesToDelete) {
+                       
+                        query = "SELECT * FROM Submission WHERE title = ? AND contestID = ?";
+                        String[] answers = null;
+                        String[] parameterss = {nameToDelete, Integer.toString(contestID)};
+                        String[] columnResultss = {"username"};
+                        String[] usernameToDelete = common.SQLquery(query, parameterss, columnResultss, false, -1,null);
+                        String from = "tolkiensocietyvoting@gmail.com";
+                        String password = "kbzmnzeygouygmcj";
+                        query = "SELECT * FROM TolkienSociety WHERE username = ?";
+                        String[] parameterss2 = {usernameToDelete[0]};
+                        String[] columnResultss2 = {"email"};
+                        String[] sendTo = common.SQLquery(query, parameterss2, columnResultss2, false, -1,null);
+                        String to = sendTo[0];
+
+   
+                        String text = "Your submission "+ nameToDelete + "has been deleted from the competition for breaching the rules of the contest."
+                                + " This was decided in ademocratic process that occured during the forum period of the contest you submitted to";
+                        String subject = "Information about your submission to "+contestID;
+                        common.sendEmail(from, password, to, text, subject);
                         query = "DELETE FROM Submissions WHERE title=? AND contestID=?";
                         String[] parameters3 = {nameToDelete, Integer.toString(contestID)};
                         System.out.println("deleted all this"+ nameToDelete);
                         common.SQLquery(query, parameters3, null, true, -1, null);
-                        String from = "tolkiensocietyvoting@gmail.com";
-                        String password = "kbzmnzeygouygmcj";
-                        String to = nameToDelete;
-                        String text = "Your submission to "+ contestID;
-                        String subject = "Information about your submission to "+contestID;
-                        common.sendEmail(from, password, to, text, subject);
                         query = "SELECT * FROM Submissions WHERE contestID = ?";
                         String[] parameters4 = {Integer.toString(contestID)};
                         String[] columns = {"contestID","title","username"};
