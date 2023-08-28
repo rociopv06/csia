@@ -70,7 +70,12 @@ public class common {
                         String[] parameters3 = {nameToDelete, Integer.toString(contestID)};
                         System.out.println("deleted all this"+ nameToDelete);
                         common.SQLquery(query, parameters3, null, true, -1, null);
-                        //deleted those that should not pass, notify in email?
+                        String from = "tolkiensocietyvoting@gmail.com";
+                        String password = "kbzmnzeygouygmcj";
+                        String to = nameToDelete;
+                        String text = "Your submission to "+ contestID;
+                        String subject = "Information about your submission to "+contestID;
+                        common.sendEmail(from, password, to, text, subject);
                         query = "SELECT * FROM Submissions WHERE contestID = ?";
                         String[] parameters4 = {Integer.toString(contestID)};
                         String[] columns = {"contestID","title","username"};
