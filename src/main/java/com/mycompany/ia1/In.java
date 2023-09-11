@@ -5,6 +5,7 @@
 package com.mycompany.ia1;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
 
 /**
@@ -24,7 +25,7 @@ public class In extends javax.swing.JFrame {
         presidentOnly.setVisible(common.isPresident());
         presidentOnly.enableInputMethods(common.isPresident());
         nameContest = DisplayContest();
-        System.out.println("NAME CONTEST "+ nameContest);
+        System.out.println("NAME CONTEST "+ Arrays.toString(nameContest));
         if(nameContest.length>0){
             displayedContest.setText(nameContest[numContest]);
         }

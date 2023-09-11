@@ -102,8 +102,8 @@ public class common {
             }
             else if(status.equals("voting")){
                 if(!currentDate.isBefore(endVoting)){//not is after because I want true when they're equal
-                    query = "SELECT * FROM VotesperSubmission WHERE contestID = ?  ORDER BY CONVERT(votes, UNSIGNED) DESC LIMIT 3";
-                    String[] columnResult = {"userSubmitted"};
+                    query = "SELECT * FROM VotesperSubmission WHERE contestID = ?  ORDER BY CONVERT(votes, UNSIGNED)";
+                    String[] columnResult = {"userSubmitted, votes"};
                     String[] parameters1 = {Integer.toString(contestID)};
                     String[] winners = common.SQLquery(query, parameters1, columnResult, false, -1, null);
                     query = "INSERT INTO Winners (contestID,name,first,second,third) VALUES (?,?,?,?,?)";
