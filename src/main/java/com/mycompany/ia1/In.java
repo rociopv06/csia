@@ -664,7 +664,7 @@ public class In extends javax.swing.JFrame {
             case "submission" -> new contestSubmission().setVisible(true);
             case "forum" -> new contestForum().setVisible(true);
             case "voting" -> new contestVoting().setVisible(true);
-            case "finished" -> new contestFinished().setVisible(true);
+            case "finished" -> new contestDone().setVisible(true);
             default -> {
             }
         }

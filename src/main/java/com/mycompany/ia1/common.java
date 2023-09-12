@@ -106,10 +106,13 @@ public class common {
                     String[] columnResult = {"userSubmitted, votes"};
                     String[] parameters1 = {Integer.toString(contestID)};
                     String[] winners = common.SQLquery(query, parameters1, columnResult, false, -1, null);
-                    query = "INSERT INTO Winners (contestID,name,first,second,third) VALUES (?,?,?,?,?)";
+                    query = "INSERT INTO Winners (contestID,name,first,second,third, ranking) VALUES (?,?,?,?,?,?)";
+                    
                     String[] parameters2 = {common.contestID,names[i],winners[0], winners[1], winners[2]};
                     common.SQLquery(query, parameters2, null, true, -1, null);
-                    /*query = "SELECT * FROM VotesperSubmission WHERE contestID = "+contestID;
+                    /*
+                    
+                    query = "SELECT * FROM VotesperSubmission WHERE contestID = "+contestID;
                     String[] column = {"votes"};
                     String[] stringVotes = common.SQLquery(query, null, column, false, -1, null);
                     int[] votes = new int[stringVotes.length];
