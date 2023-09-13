@@ -9,7 +9,7 @@ package com.mycompany.ia1;
  * @author rociopv
  */
 public class contestDone extends javax.swing.JFrame {
-    int currentWinner = 0;
+    int currentWinner,pos = 1;
     String query = "SELECT * FROM VotesperSubmission WHERE contestID = ?  ORDER BY CONVERT(votes, UNSIGNED) DESC";
     String[] columnResult = {"userSubmitted", "votes"};
     String[] parameters = {common.contestID};
@@ -19,7 +19,7 @@ public class contestDone extends javax.swing.JFrame {
      * Creates new form contestDone
      */
     public contestDone() {
-
+        initComponents();
     }
 
     /**
@@ -114,11 +114,11 @@ public class contestDone extends javax.swing.JFrame {
     private void nextRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextRankingActionPerformed
 
   
-            while (currentWinner+2 <= winners.length){
+            while (currentWinner <= winners.length){
+                
+                jTextArea1.append("\n" + "In position number " + pos + " user " + winners[currentWinner-1] + " with " + winners[currentWinner]+ " number of votes");
                 currentWinner +=2;
-                
-                jTextArea1.append("\n" + "In position number " + currentWinner + " user " + winners[currentWinner-1] + " with " + winners[currentWinner]+ " number of votes");
-                
+                int pos = currentWinner-1;
             }
         
         
@@ -127,11 +127,11 @@ public class contestDone extends javax.swing.JFrame {
 
     private void backRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backRankingActionPerformed
 
-            while (currentWinner-2 >= 0){
-                currentWinner -=2;
-              
-                jTextArea1.append("\n" + "In position number " + currentWinner + " " + winners[currentWinner+1] + " with " + winners[currentWinner]+ " number of votes");
+            while (currentWinner >= 0){
                 
+                jTextArea1.append("\n" + "In position number " + pos + " " + winners[currentWinner+1] + " with " + winners[currentWinner]+ " number of votes");
+                currentWinner -=2;
+                int pos = currentWinner+1;
             }
 
     }//GEN-LAST:event_backRankingActionPerformed
