@@ -14,13 +14,13 @@ public class contestDone extends javax.swing.JFrame {
     String[] columnResult = {"userSubmitted", "votes"};
     String[] parameters = {common.contestID};
     String[] winners = common.SQLquery(query, parameters, columnResult, false, -1, null);
-    
+
     /**
      * Creates new form contestDone
      */
     public contestDone() {
         initComponents();
-        jTextArea1.append("\n" + "In position number 1 "+ winners[0] + " with" + winners[1]+ " number of votes");
+        jTextArea1.append("\n" + "In position number 1 "+ winners[0] + " with " + winners[1]+ " votes");
     }
 
     /**
@@ -45,7 +45,7 @@ public class contestDone extends javax.swing.JFrame {
         jPanel1.setMinimumSize(new java.awt.Dimension(800, 500));
 
         ContestName.setFont(new java.awt.Font("Helvetica Neue", 0, 48)); // NOI18N
-        ContestName.setText("jLabel1");
+        ContestName.setText("Contest ranking");
 
         backRanking.setText("<-");
         backRanking.addActionListener(new java.awt.event.ActionListener() {
@@ -70,25 +70,26 @@ public class contestDone extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(307, 307, 307)
-                .addComponent(ContestName)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(169, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(backRanking)
-                        .addGap(359, 359, 359)
-                        .addComponent(nextRanking))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(128, 128, 128))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(backRanking)
+                                .addGap(359, 359, 359)
+                                .addComponent(nextRanking))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(128, 128, 128))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(ContestName)
+                        .addGap(224, 224, 224))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
+                .addGap(46, 46, 46)
                 .addComponent(ContestName)
-                .addGap(35, 35, 35)
+                .addGap(34, 34, 34)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -116,8 +117,8 @@ public class contestDone extends javax.swing.JFrame {
         if (currentWinner < winners.length){
             jTextArea1.removeAll();
             while (currentWinner <= winners.length){
-                currentWinner +=2;
-                jTextArea1.append("\n" + "In position number " + currentWinner + " " + winners[currentWinner+2] + " with " + winners[currentWinner+3]+ " number of votes");
+                currentWinner +=1;
+                jTextArea1.append("\n" + "In position number " + currentWinner+1 + " user " + winners[currentWinner] + " with " + winners[currentWinner+1]+ " number of votes");
                 
             }
         }
@@ -129,8 +130,8 @@ public class contestDone extends javax.swing.JFrame {
         if (currentWinner-3 >= 0){
             jTextArea1.removeAll();
             while (currentWinner >= 0){
-                currentWinner -=2;
-                jTextArea1.append("\n" + "In position number " + currentWinner + " " + winners[currentWinner-2] + " with " + winners[currentWinner-3]+ " number of votes");
+                currentWinner -=1;
+                jTextArea1.append("\n" + "In position number " + currentWinner+1 + " " + winners[currentWinner] + " with " + winners[currentWinner-1]+ " number of votes");
                 
             }
         }
