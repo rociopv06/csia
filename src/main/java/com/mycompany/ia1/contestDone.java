@@ -19,8 +19,7 @@ public class contestDone extends javax.swing.JFrame {
      * Creates new form contestDone
      */
     public contestDone() {
-        initComponents();
-        jTextArea1.append("\n" + "In position number 1 "+ winners[0] + " with " + winners[1]+ " votes");
+
     }
 
     /**
@@ -114,27 +113,27 @@ public class contestDone extends javax.swing.JFrame {
 
     private void nextRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextRankingActionPerformed
 
-        if (currentWinner < winners.length){
-            jTextArea1.removeAll();
-            while (currentWinner <= winners.length){
-                currentWinner +=1;
-                jTextArea1.append("\n" + "In position number " + currentWinner+1 + " user " + winners[currentWinner] + " with " + winners[currentWinner+1]+ " number of votes");
+  
+            while (currentWinner+2 <= winners.length){
+                currentWinner +=2;
+                
+                jTextArea1.append("\n" + "In position number " + currentWinner + " user " + winners[currentWinner-1] + " with " + winners[currentWinner]+ " number of votes");
                 
             }
-        }
+        
         
     
     }//GEN-LAST:event_nextRankingActionPerformed
 
     private void backRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backRankingActionPerformed
-        if (currentWinner-3 >= 0){
-            jTextArea1.removeAll();
-            while (currentWinner >= 0){
-                currentWinner -=1;
-                jTextArea1.append("\n" + "In position number " + currentWinner+1 + " " + winners[currentWinner] + " with " + winners[currentWinner-1]+ " number of votes");
+
+            while (currentWinner-2 >= 0){
+                currentWinner -=2;
+              
+                jTextArea1.append("\n" + "In position number " + currentWinner + " " + winners[currentWinner+1] + " with " + winners[currentWinner]+ " number of votes");
                 
             }
-        }
+
     }//GEN-LAST:event_backRankingActionPerformed
 
     /**
