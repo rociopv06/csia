@@ -9,7 +9,7 @@ package com.mycompany.ia1;
  * @author rociopv
  */
 public class contestDone extends javax.swing.JFrame {
-    int currentWinner,pos = 1;
+    
     String query = "SELECT * FROM VotesperSubmission WHERE contestID = ?  ORDER BY CONVERT(votes, UNSIGNED) DESC";
     String[] columnResult = {"userSubmitted", "votes"};
     String[] parameters = {common.contestID};
@@ -20,6 +20,15 @@ public class contestDone extends javax.swing.JFrame {
      */
     public contestDone() {
         initComponents();
+        int currentWinner = 1;
+        int pos = 1;
+  
+            while (currentWinner <= winners.length){
+                
+                jTextArea1.append( "In position number " + pos + " user " + winners[currentWinner-1] + " with " + winners[currentWinner]+ " votes \n" );
+                currentWinner +=2;
+                pos++;
+            }
     }
 
     /**
@@ -33,7 +42,6 @@ public class contestDone extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         ContestName = new javax.swing.JLabel();
-        backRanking = new javax.swing.JButton();
         nextRanking = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -46,14 +54,7 @@ public class contestDone extends javax.swing.JFrame {
         ContestName.setFont(new java.awt.Font("Helvetica Neue", 0, 48)); // NOI18N
         ContestName.setText("Contest ranking");
 
-        backRanking.setText("<-");
-        backRanking.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backRankingActionPerformed(evt);
-            }
-        });
-
-        nextRanking.setText("->");
+        nextRanking.setText("back");
         nextRanking.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nextRankingActionPerformed(evt);
@@ -72,29 +73,26 @@ public class contestDone extends javax.swing.JFrame {
                 .addContainerGap(169, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(backRanking)
-                                .addGap(359, 359, 359)
-                                .addComponent(nextRanking))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(128, 128, 128))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(ContestName)
-                        .addGap(224, 224, 224))))
+                        .addGap(224, 224, 224))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(128, 128, 128))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(nextRanking, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
+                .addGap(11, 11, 11)
+                .addComponent(nextRanking)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ContestName)
                 .addGap(34, 34, 34)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nextRanking)
-                    .addComponent(backRanking))
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(85, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -112,29 +110,9 @@ public class contestDone extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nextRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextRankingActionPerformed
-
-  
-            while (currentWinner <= winners.length){
-                
-                jTextArea1.append("\n" + "In position number " + pos + " user " + winners[currentWinner-1] + " with " + winners[currentWinner]+ " number of votes");
-                currentWinner +=2;
-                int pos = currentWinner-1;
-            }
-        
-        
-    
+        this.setVisible(false);
+        new In().setVisible(true);
     }//GEN-LAST:event_nextRankingActionPerformed
-
-    private void backRankingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backRankingActionPerformed
-
-            while (currentWinner >= 0){
-                
-                jTextArea1.append("\n" + "In position number " + pos + " " + winners[currentWinner+1] + " with " + winners[currentWinner]+ " number of votes");
-                currentWinner -=2;
-                int pos = currentWinner+1;
-            }
-
-    }//GEN-LAST:event_backRankingActionPerformed
 
     /**
      * @param args the command line arguments
@@ -173,7 +151,6 @@ public class contestDone extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel ContestName;
-    private javax.swing.JButton backRanking;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
