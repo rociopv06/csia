@@ -88,6 +88,7 @@ public class contestVoting extends javax.swing.JFrame {
             }
         });
 
+        voteButton.setBackground(new java.awt.Color(220, 239, 216));
         voteButton.setText("Vote for this Submission");
         voteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

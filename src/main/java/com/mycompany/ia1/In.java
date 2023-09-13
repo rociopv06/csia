@@ -24,6 +24,8 @@ public class In extends javax.swing.JFrame {
         common.updateStatus(); 
         presidentOnly.setVisible(common.isPresident());
         presidentOnly.enableInputMethods(common.isPresident());
+        emergency.setVisible(common.isPresident());
+        emergency.enableInputMethods(common.isPresident());
         nameContest = DisplayContest();
         System.out.println("NAME CONTEST "+ Arrays.toString(nameContest));
         if(nameContest.length>0){
@@ -103,6 +105,7 @@ public class In extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         displayedContest = new javax.swing.JButton();
         LogOut = new javax.swing.JButton();
+        emergency = new javax.swing.JButton();
 
         newContestDialog.setAlwaysOnTop(true);
         newContestDialog.setBackground(new java.awt.Color(226, 202, 163));
@@ -426,6 +429,7 @@ public class In extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 500));
         jPanel1.setSize(new java.awt.Dimension(800, 500));
 
+        presidentOnly.setBackground(new java.awt.Color(220, 239, 216));
         presidentOnly.setText("Edit contests");
         presidentOnly.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -495,17 +499,19 @@ public class In extends javax.swing.JFrame {
             }
         });
 
+        emergency.setBackground(new java.awt.Color(200, 60, 60));
+        emergency.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        emergency.setForeground(new java.awt.Color(255, 255, 255));
+        emergency.setText("EMERGENCY VOTING");
+        emergency.setToolTipText("");
+        emergency.setMaximumSize(new java.awt.Dimension(107, 23));
+        emergency.setMinimumSize(new java.awt.Dimension(107, 23));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(presidentOnly, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(LogOut)
-                .addGap(37, 37, 37))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 249, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -515,6 +521,14 @@ public class In extends javax.swing.JFrame {
                         .addGap(218, 218, 218)
                         .addComponent(next)))
                 .addGap(247, 247, 247))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(emergency, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(presidentOnly, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(LogOut)
+                .addGap(37, 37, 37))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -523,7 +537,9 @@ public class In extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(presidentOnly, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LogOut))
-                .addGap(62, 62, 62)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(emergency, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
                 .addComponent(displayedContest, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -538,9 +554,7 @@ public class In extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -730,6 +744,7 @@ public class In extends javax.swing.JFrame {
     private javax.swing.JTextField contestName;
     private javax.swing.JComboBox<String> currentStatus;
     private javax.swing.JButton displayedContest;
+    private javax.swing.JButton emergency;
     private javax.swing.JFormattedTextField forumStarts;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

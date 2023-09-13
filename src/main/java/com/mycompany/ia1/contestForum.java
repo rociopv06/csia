@@ -292,6 +292,7 @@ public class contestForum extends javax.swing.JFrame {
         bodyReport.setRows(5);
         jScrollPane2.setViewportView(bodyReport);
 
+        Keep.setBackground(new java.awt.Color(220, 239, 216));
         Keep.setText("Keep");
         Keep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -299,6 +300,7 @@ public class contestForum extends javax.swing.JFrame {
             }
         });
 
+        Delete.setBackground(new java.awt.Color(200, 60, 60));
         Delete.setText("Delete");
         Delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -356,6 +358,7 @@ public class contestForum extends javax.swing.JFrame {
             }
         });
 
+        openNewReport.setBackground(new java.awt.Color(220, 239, 216));
         openNewReport.setText("Make new report");
         openNewReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

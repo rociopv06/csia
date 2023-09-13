@@ -12,7 +12,7 @@ public class Ia1 {
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
-        
+        new open().setVisible(true);
     }
     
 }

@@ -101,6 +101,7 @@ public class open extends javax.swing.JFrame {
 
         ForgotPasswordButton.setForeground(new java.awt.Color(67, 69, 66));
         ForgotPasswordButton.setText("Forgot password?");
+        ForgotPasswordButton.setBorderPainted(false);
         ForgotPasswordButton.setOpaque(true);
         ForgotPasswordButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

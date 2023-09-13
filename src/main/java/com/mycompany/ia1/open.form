@@ -202,6 +202,7 @@
               <Color blue="42" green="45" red="43" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Forgot password?"/>
+            <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="opaque" type="boolean" value="true"/>
           </Properties>
           <Events>
