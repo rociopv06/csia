@@ -4,9 +4,17 @@
  */
 package com.mycompany.ia1;
 
+import java.awt.Image;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -26,7 +34,7 @@ public class In extends javax.swing.JFrame {
         presidentOnly.enableInputMethods(common.isPresident());
         emergency.setVisible(common.isPresident());
         emergency.enableInputMethods(common.isPresident());
-        nameContest = DisplayContest();
+        nameContest = DisplayContest(String.valueOf(currentStatus.getSelectedItem()));
         System.out.println("NAME CONTEST "+ Arrays.toString(nameContest));
         if(nameContest.length>0){
             displayedContest.setText(nameContest[numContest]);
@@ -41,11 +49,11 @@ public class In extends javax.swing.JFrame {
         
        
     }
-    private String[] DisplayContest(){
+    private String[] DisplayContest(String statusToDisplay){
         String query = "SELECT * FROM Contests WHERE status = ?";
         String[] answers = null;
-        String[] parameters = {String.valueOf(currentStatus.getSelectedItem())};
-        String[] columnResults = {"name"};
+        String[] parameters = {statusToDisplay};
+        String[] columnResults = {"name","id"};
         answers = common.SQLquery(query, parameters, columnResults, false, -1,null);
         return answers;
     }
@@ -439,8 +447,18 @@ public class In extends javax.swing.JFrame {
         jLabel14.setText("Tie breaker");
 
         submissionB2.setText("This one should win");
+        submissionB2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submissionB2ActionPerformed(evt);
+            }
+        });
 
         submissionB1.setText("This one should win!");
+        submissionB1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submissionB1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -731,7 +749,7 @@ public class In extends javax.swing.JFrame {
 
     private void currentStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentStatusActionPerformed
         numContest= 0;
-        nameContest = DisplayContest();
+        nameContest = DisplayContest(String.valueOf(currentStatus.getSelectedItem()));
         if(nameContest.length>0){
             displayedContest.setText(nameContest[numContest]);
         }
@@ -754,7 +772,7 @@ public class In extends javax.swing.JFrame {
             case "forum" -> new contestForum().setVisible(true);
             case "voting" -> new contestVoting().setVisible(true);
             case "finished" -> new contestDone().setVisible(true);
-            //case "emergency" -> new contestDone().setVisible(true);
+          
             default -> {
             }
         }
@@ -767,9 +785,79 @@ public class In extends javax.swing.JFrame {
     }//GEN-LAST:event_LogOutActionPerformed
 
     private void emergencyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emergencyActionPerformed
-        emergencyState.setVisible(true);
-
+        
+        jLabel14.setText("Tie breaker for "+ DisplayContest("emergency")[0]);
+          String query = "SELECT * FROM Submissions WHERE title = ? AND contestID = ?"; 
+            int[] dimensions = {800,500};
+           
+            String[] columnResults = {"document"};
+            String[] parameters = {common.tiedTitles[0],DisplayContest("emergency")[1]};
+            String[] extracted = common.SQLquery(query, parameters, columnResults, false, -1, null);
+            byte[] extract = Base64.getDecoder().decode(extracted[0]);
+            ByteArrayInputStream bis = new ByteArrayInputStream(extract);
+            try {
+                dimensions = common.reziseProportionally( ImageIO.read(bis), 800, 1000) ;
+            } catch (IOException ex) {
+                Logger.getLogger(contestForum.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ImageIcon image = new ImageIcon(extract);
+            Image img = image.getImage();
+            System.out.println("dimensions" + dimensions[0]+ dimensions[1]);
+            Image scaledImg = img.getScaledInstance(dimensions[0], dimensions[1],Image.SCALE_SMOOTH);
+            ImageIcon newImage = new ImageIcon(scaledImg);
+            submission1.setIcon(newImage);
+            String[] columnResults2 = {"document"};
+            String[] parameters2 = {common.tiedTitles[1],DisplayContest("emergency")[1]};
+            String[] extracted2 = common.SQLquery(query, parameters2, columnResults2, false, -1, null);
+            byte[] extract2 = Base64.getDecoder().decode(extracted2[0]);
+            ByteArrayInputStream bis2 = new ByteArrayInputStream(extract2);
+            try {
+                dimensions = common.reziseProportionally( ImageIO.read(bis2), 800, 1000) ;
+            } catch (IOException ex) {
+                Logger.getLogger(contestForum.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ImageIcon image2 = new ImageIcon(extract);
+            Image img2 = image2.getImage();
+            System.out.println("dimensions" + dimensions[0]+ dimensions[1]);
+            Image scaledImg2 = img2.getScaledInstance(dimensions[0], dimensions[1],Image.SCALE_SMOOTH);
+            ImageIcon newImage2 = new ImageIcon(scaledImg2);
+            submission2.setIcon(newImage2);
+          emergencyState.setVisible(true);
     }//GEN-LAST:event_emergencyActionPerformed
+
+    private void submissionB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submissionB1ActionPerformed
+        String query =  "SELECT * FROM VotesperSubmission WHERE titleSubmission = ? AND contestID = ?";
+        String[] columnResults = {"votes"};
+        String[] parameters = {common.tiedTitles[0] , DisplayContest("emergency")[1]};
+        String[] stringVotes = common.SQLquery(query, parameters, columnResults, false, -1, null);
+        int votes = Integer.parseInt(stringVotes[0]);
+        votes++;
+        stringVotes[0] = Integer.toString(votes);
+        query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
+        String[] parameter2 = {common.tiedTitles[0] , DisplayContest("emergency")[1]};
+        common.SQLquery(query, parameter2, null, true, -1, null);
+        query = "UPDATE Contests SET status = ? WHERE name = ? ";
+        String[] parameters2 = {"voting", DisplayContest("emergency")[0]};
+        common.SQLquery(query, parameters2, null, true, -1, null);
+        emergencyState.setVisible(true);
+    }//GEN-LAST:event_submissionB1ActionPerformed
+
+    private void submissionB2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submissionB2ActionPerformed
+        String query =  "SELECT * FROM VotesperSubmission WHERE titleSubmission = ? AND contestID = ?";
+        String[] columnResults = {"votes"};
+        String[] parameters = {common.tiedTitles[1] , DisplayContest("emergency")[1]};
+        String[] stringVotes = common.SQLquery(query, parameters, columnResults, false, -1, null);
+        int votes = Integer.parseInt(stringVotes[0]);
+        votes++;
+        stringVotes[0] = Integer.toString(votes);
+        query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
+        String[] parameter2 = {common.tiedTitles[1] , DisplayContest("emergency")[1]};
+        common.SQLquery(query, parameter2, null, true, -1, null);
+        query = "UPDATE Contests SET status = ? WHERE name = ? ";
+        String[] parameters2 = {"voting", DisplayContest("emergency")[0]};
+        common.SQLquery(query, parameters2, null, true, -1, null);
+        emergencyState.setVisible(true);
+    }//GEN-LAST:event_submissionB2ActionPerformed
 
     /**
      * @param args the command line arguments

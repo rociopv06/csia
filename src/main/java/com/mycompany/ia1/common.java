@@ -34,7 +34,7 @@ import javax.mail.internet.MimeMessage;
  * @author rociopv
  */
 public class common {
-    
+    public static String[] tiedTitles={"",""};
     public static String contestID;
     public static void updateStatus(){
         String query = "SELECT * FROM Contests";
@@ -103,15 +103,47 @@ public class common {
             else if(status.equals("voting")){
                 if(!currentDate.isBefore(endVoting)){//not is after because I want true when they're equal
                     query = "SELECT * FROM VotesperSubmission WHERE contestID = ?  ORDER BY CONVERT(votes, UNSIGNED)";
-                    String[] columnResult = {"userSubmitted, votes"};
+                    String[] columnResult = {"votes"};
                     String[] parameters1 = {Integer.toString(contestID)};
                     String[] winners = common.SQLquery(query, parameters1, columnResult, false, -1, null);
-                    query = "INSERT INTO Winners (contestID,name,first,second,third, ranking) VALUES (?,?,?,?,?,?)";
-                    
-                    String[] parameters2 = {common.contestID,names[i],winners[0], winners[1], winners[2]};
-                    common.SQLquery(query, parameters2, null, true, -1, null);
+                    if(winners[0].equals(winners[2])){
+                        updatedStatus = "emergency";//possible bug here if the date passes and then it does not update
+                        tiedTitles[0] = winners[1];
+                        tiedTitles[1] = winners[3];
+                        String from = "tolkiensocietyvoting@gmail.com";
+                        String password = "kbzmnzeygouygmcj";
+                        query = "SELECT * FROM TolkienSociety WHERE username = ?";
+                        String[] parameterss2 = {"president"};
+                        String[] columnResultss2 = {"email"};
+                        String[] sendTo = common.SQLquery(query, parameterss2, columnResultss2, false, -1,null);
+                        String to = sendTo[0];
+
+   
+                        String text = "Please open the Tolkien Society app immeadiately, there is a contest with a tie that you need to break";
+                        String subject = "Tie break for first place!";
+                        common.sendEmail(from, password, to, text, subject);
+                    }
+                    else if(winners[2].equals(winners[4])){
+                        updatedStatus = "emergency";//possible bug here if the date passes and then it does not update
+                        String from = "tolkiensocietyvoting@gmail.com";
+                        String password = "kbzmnzeygouygmcj";
+                        query = "SELECT * FROM TolkienSociety WHERE username = ?";
+                        String[] parameterss2 = {"president"};
+                        String[] columnResultss2 = {"email"};
+                        String[] sendTo = common.SQLquery(query, parameterss2, columnResultss2, false, -1,null);
+                        String to = sendTo[0];
+
+   
+                        String text = "Please open the Tolkien Society app immeadiately, there is a contest with a tie that you need to break";
+                        String subject = "Tie break for second place!";
+                        common.sendEmail(from, password, to, text, subject);
+                        tiedTitles[0] = winners[3];
+                        tiedTitles[1] = winners[5];
+                    }
+                    else{
+                        updatedStatus = "finished"; //possible bug here if the date passes and then it does not update
+                    }
                     /*
-                    
                     query = "SELECT * FROM VotesperSubmission WHERE contestID = "+contestID;
                     String[] column = {"votes"};
                     String[] stringVotes = common.SQLquery(query, null, column, false, -1, null);
@@ -126,8 +158,6 @@ public class common {
                     String[] column2 = {"userSubmitted"};
                     String[] firstUser = */
                     
-                    
-                    updatedStatus = "finished"; //possible bug here if the date passes and then it does not update
                 }
                 
             }

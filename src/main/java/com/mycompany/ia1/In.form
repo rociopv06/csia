@@ -611,11 +611,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="This one should win"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="submissionB2ActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="submissionB1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="This one should win!"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="submissionB1ActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
