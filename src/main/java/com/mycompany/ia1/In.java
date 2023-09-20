@@ -533,6 +533,8 @@ public class In extends javax.swing.JFrame {
         });
 
         back.setText("<-");
+        back.setMaximumSize(new java.awt.Dimension(43, 23));
+        back.setMinimumSize(new java.awt.Dimension(43, 23));
         back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backActionPerformed(evt);
@@ -639,7 +641,7 @@ public class In extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(next)
-                    .addComponent(back))
+                    .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40))
         );
 
@@ -734,15 +736,15 @@ public class In extends javax.swing.JFrame {
     }//GEN-LAST:event_closeConfirmationActionPerformed
 
     private void nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextActionPerformed
-        if (nameContest.length > numContest+1){
-            numContest++;
+        if (nameContest.length > numContest+2){
+            numContest+=2;
             displayedContest.setText(nameContest[numContest]);
         }
     }//GEN-LAST:event_nextActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
-        if (numContest-1>=0){
-            numContest--;
+        if (numContest-2>=0){
+            numContest-=2;
             displayedContest.setText(nameContest[numContest]);
         }
     }//GEN-LAST:event_backActionPerformed
