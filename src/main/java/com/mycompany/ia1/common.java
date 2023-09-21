@@ -66,6 +66,7 @@ public class common {
                     String[] parameter = {common.contestID};
                     
                     String[] namesToDelete = common.SQLquery(query, parameter, columnToDelete, false, -1, null);
+                    System.out.println("names to delete"+ namesToDelete[0]);
                     updatedStatus = "voting"; //possible bug here if the date passes and then it does not update
                     for (String nameToDelete : namesToDelete) {
                        
