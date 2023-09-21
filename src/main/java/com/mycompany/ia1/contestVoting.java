@@ -115,13 +115,17 @@ public class contestVoting extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(back)
-                        .addComponent(votesLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(warning))
-                .addGap(59, 59, 59)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(back)
+                            .addComponent(warning))
+                        .addGap(59, 59, 59))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(votesLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -210,10 +214,11 @@ public class contestVoting extends javax.swing.JFrame {
             query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
             String[] parameter2 = {stringVotes[0],String.valueOf(titles.getSelectedItem()) , common.contestID};
             common.SQLquery(query, parameter2, null, true, -1, null);
-            query = "UPDATE VotesperContest SET userVotes =CONCAT(userVotes, ?) WHERE contestID = ?";
+            query = "UPDATE VotesperContest SET userVotes = CONCAT(userVotes, ?) WHERE contestID = ?";
             String[] parameter3 = {common.currentUser, common.contestID};
+            System.out.println("AAAAAAAAAA "+ common.contestID);
             common.SQLquery(query, parameter3, null, true, -1, null);
-            votesLeft.setText("Votes left: "+ votes);
+            votesLeft.setText("Votes left: "+ (personalVotesLeft--));
         }
         else{
             warning.setText("No votes left");

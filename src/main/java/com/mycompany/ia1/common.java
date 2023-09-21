@@ -63,9 +63,10 @@ public class common {
                 if(!currentDate.isBefore(startVoting)){//not is after because I want true when they're equal
                     query = "SELECT * FROM ForumReports WHERE pass = 'no'AND contestID = ?";
                     String[] columnToDelete = {"titleReport"};
-                    String[] parameter = {common.contestID};
+                    String[] parameter = {contestID};
                     
                     String[] namesToDelete = common.SQLquery(query, parameter, columnToDelete, false, -1, null);
+                    System.out.println("LOOK HERE");
                     System.out.println("names to delete"+ namesToDelete[0]);
                     updatedStatus = "voting"; //possible bug here if the date passes and then it does not update
                     for (String nameToDelete : namesToDelete) {
@@ -94,12 +95,15 @@ public class common {
                         String[] parameters3 = {nameToDelete, contestID};
                         System.out.println("deleted all this"+ nameToDelete);
                         common.SQLquery(query, parameters3, null, true, -1, null);
-                        query = "SELECT * FROM Submissions WHERE contestID = ?";
-                        String[] parameters4 = {contestID};
-                        String[] columns = {"contestID","title","username"};
-                        String[] retrieved = common.SQLquery(query, parameters4, columns, false,-1,null);
+                        
+                    }
+                    query = "SELECT * FROM Submissions WHERE contestID = ?";
+                    String[] parameters4 = {contestID};
+                    String[] columns = {"contestID","title","username"};
+                    String[] retrieved = common.SQLquery(query, parameters4, columns, false,-1,null);
+                    for(int j = 0; j<retrieved.length;j+=3){
                         query = "INSERT INTO VotesperSubmission (contestID,titleSubmission,userSubmitted,votes) VALUES (?,?,?,?)";
-                        String[] parameters5 = {retrieved[0],retrieved[1],retrieved[2],"0"};
+                        String[] parameters5 = {retrieved[j],retrieved[j+1],retrieved[j],"0"};
                         common.SQLquery(query, parameters5, null, true, -1, null);
                     }
                 }
