@@ -52,7 +52,7 @@ public class common {
             LocalDate startVoting = turnLocalDate(data[2]);
             LocalDate endVoting = turnLocalDate(data[3]);
             LocalDate currentDate = LocalDate.now();
-            int contestID = Integer.parseInt(data[4]);
+            contestID = (data[4]);
             String updatedStatus = "";
             if(status.equals("submission")){
                 if(!currentDate.isBefore(startForum)){//not is after because I want true when they're equal
@@ -61,17 +61,21 @@ public class common {
             }
             else if(status.equals("forum")){
                 if(!currentDate.isBefore(startVoting)){//not is after because I want true when they're equal
-                    query = "SELECT * FROM ForumReports WHERE pass = 'no'";
+                    query = "SELECT * FROM ForumReports WHERE pass = 'no'AND contestID = ?";
                     String[] columnToDelete = {"titleReport"};
-                    String[] namesToDelete = common.SQLquery(query, empty, columnToDelete, false, -1, null);
+                    String[] parameter = {common.contestID};
+                    
+                    String[] namesToDelete = common.SQLquery(query, parameter, columnToDelete, false, -1, null);
                     updatedStatus = "voting"; //possible bug here if the date passes and then it does not update
                     for (String nameToDelete : namesToDelete) {
                        
-                        query = "SELECT * FROM Submission WHERE title = ? AND contestID = ?";
+                        query = "SELECT * FROM Submissions WHERE title = ? AND contestID = ?";
                         String[] answers = null;
-                        String[] parameterss = {nameToDelete, Integer.toString(contestID)};
+                        String[] parameterss = {nameToDelete, contestID};
                         String[] columnResultss = {"username"};
                         String[] usernameToDelete = common.SQLquery(query, parameterss, columnResultss, false, -1,null);
+                        System.out.println(nameToDelete);
+                        System.out.println(contestID);
                         String from = "tolkiensocietyvoting@gmail.com";
                         String password = "kbzmnzeygouygmcj";
                         query = "SELECT * FROM TolkienSociety WHERE username = ?";
@@ -86,11 +90,11 @@ public class common {
                         String subject = "Information about your submission to "+contestID;
                         common.sendEmail(from, password, to, text, subject);
                         query = "DELETE FROM Submissions WHERE title=? AND contestID=?";
-                        String[] parameters3 = {nameToDelete, Integer.toString(contestID)};
+                        String[] parameters3 = {nameToDelete, contestID};
                         System.out.println("deleted all this"+ nameToDelete);
                         common.SQLquery(query, parameters3, null, true, -1, null);
                         query = "SELECT * FROM Submissions WHERE contestID = ?";
-                        String[] parameters4 = {Integer.toString(contestID)};
+                        String[] parameters4 = {contestID};
                         String[] columns = {"contestID","title","username"};
                         String[] retrieved = common.SQLquery(query, parameters4, columns, false,-1,null);
                         query = "INSERT INTO VotesperSubmission (contestID,titleSubmission,userSubmitted,votes) VALUES (?,?,?,?)";
@@ -104,7 +108,7 @@ public class common {
                 if(!currentDate.isBefore(endVoting)){//not is after because I want true when they're equal
                     query = "SELECT * FROM VotesperSubmission WHERE contestID = ?  ORDER BY CONVERT(votes, UNSIGNED)";
                     String[] columnResult = {"votes"};
-                    String[] parameters1 = {Integer.toString(contestID)};
+                    String[] parameters1 = {contestID};
                     String[] winners = common.SQLquery(query, parameters1, columnResult, false, -1, null);
                     if(winners[0].equals(winners[2])){
                         updatedStatus = "emergency";//possible bug here if the date passes and then it does not update

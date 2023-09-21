@@ -731,8 +731,12 @@ public class In extends javax.swing.JFrame {
         String[] parameters = {contestName.getText(), votesNumber.getSelectedItem().toString(),votesNumber.getSelectedItem().toString()
         ,subStart.getText(),forumStarts.getText(),votingStarts.getText(),votingEnds.getText(), "submission" };
         common.SQLquery(query, parameters, null, true, -1,null);
+        query = "SELECT * FROM Contests where name = ?, startSubmissions = ?";
+        String[] Parameter = {contestName.getText(), subStart.getText()};
+        String[] columnResults2 = {"id"};
+        String[] data = common.SQLquery(query, Parameter, columnResults2, false, -1,null);
         query = "INSERT INTO VotesperContest(contestID, userVotes, userMaxVotes) VALUES (?,?,?)";
-        String[] parameters2 = {common.contestID, "",votesNumber.getSelectedItem().toString()};
+        String[] parameters2 = {data[0], "",votesNumber.getSelectedItem().toString()};
         common.SQLquery(query, parameters2, null, true, -1, null);
         confirmation.setVisible(false);
         newContestDialog.setVisible(false);
