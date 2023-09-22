@@ -112,9 +112,10 @@ public class common {
             else if(status.equals("voting")){
                 if(!currentDate.isBefore(endVoting)){//not is after because I want true when they're equal
                     query = "SELECT * FROM VotesperSubmission WHERE contestID = ?  ORDER BY CONVERT(votes, UNSIGNED)";
-                    String[] columnResult = {"votes"};
+                    String[] columnResult = {"votes", "titleSubmission"};
                     String[] parameters1 = {contestID};
                     String[] winners = common.SQLquery(query, parameters1, columnResult, false, -1, null);
+                    
                     if(winners[0].equals(winners[2])){
                         updatedStatus = "emergency";//possible bug here if the date passes and then it does not update
                         tiedTitles[0] = winners[1];
@@ -150,6 +151,8 @@ public class common {
                         tiedTitles[1] = winners[5];
                     }
                     else{
+                        
+        
                         updatedStatus = "finished"; //possible bug here if the date passes and then it does not update
                     }
                     /*

@@ -435,6 +435,8 @@ public class In extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
+        emergencyState.setAlwaysOnTop(true);
+
         jPanel5.setBackground(new java.awt.Color(226, 202, 163));
 
         submission1.setText("jLabel14");
@@ -847,12 +849,12 @@ public class In extends javax.swing.JFrame {
         votes++;
         stringVotes[0] = Integer.toString(votes);
         query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
-        String[] parameter2 = {common.tiedTitles[0] , DisplayContest("emergency")[1]};
+        String[] parameter2 = {stringVotes[0],common.tiedTitles[0] , DisplayContest("emergency")[1]};
         common.SQLquery(query, parameter2, null, true, -1, null);
         query = "UPDATE Contests SET status = ? WHERE name = ? ";
         String[] parameters2 = {"voting", DisplayContest("emergency")[0]};
         common.SQLquery(query, parameters2, null, true, -1, null);
-        emergencyState.setVisible(true);
+        emergencyState.setVisible(false);
     }//GEN-LAST:event_submissionB1ActionPerformed
 
     private void submissionB2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submissionB2ActionPerformed
@@ -864,12 +866,12 @@ public class In extends javax.swing.JFrame {
         votes++;
         stringVotes[0] = Integer.toString(votes);
         query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
-        String[] parameter2 = {common.tiedTitles[1] , DisplayContest("emergency")[1]};
+        String[] parameter2 = {stringVotes[0], common.tiedTitles[1] , DisplayContest("emergency")[1]};
         common.SQLquery(query, parameter2, null, true, -1, null);
         query = "UPDATE Contests SET status = ? WHERE name = ? ";
         String[] parameters2 = {"voting", DisplayContest("emergency")[0]};
         common.SQLquery(query, parameters2, null, true, -1, null);
-        emergencyState.setVisible(true);
+        emergencyState.setVisible(false);
     }//GEN-LAST:event_submissionB2ActionPerformed
 
     /**

@@ -214,11 +214,11 @@ public class contestVoting extends javax.swing.JFrame {
             query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
             String[] parameter2 = {stringVotes[0],String.valueOf(titles.getSelectedItem()) , common.contestID};
             common.SQLquery(query, parameter2, null, true, -1, null);
-            query = "UPDATE VotesperContest SET userVotes = CONCAT(userVotes, ?) WHERE contestID = ?";
+            query = "UPDATE VotesperContest SET userVotes = CONCAT(COALESCE(userVotes, ''), ?) WHERE contestID = ?";
             String[] parameter3 = {common.currentUser, common.contestID};
-            System.out.println("AAAAAAAAAA "+ common.contestID);
+            System.out.println("AAAAAAAAAA "+ common.currentUser);
             common.SQLquery(query, parameter3, null, true, -1, null);
-            votesLeft.setText("Votes left: "+ (personalVotesLeft--));
+            votesLeft.setText("Votes left: "+ calculateVotesLeft());
         }
         else{
             warning.setText("No votes left");

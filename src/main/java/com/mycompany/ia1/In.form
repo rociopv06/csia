@@ -512,6 +512,9 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JDialog" name="emergencyState">
+      <Properties>
+        <Property name="alwaysOnTop" type="boolean" value="true"/>
+      </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
