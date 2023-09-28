@@ -411,7 +411,7 @@ public class SignUp extends javax.swing.JFrame {
         NotRecognizedLabel.setText(" ");
         String[] parameters = {inputUsername};
         String[] columnResults = {"email"};
-        String extracted[] = common.SQLquery(query, parameters, columnResults,false,-1,null);
+        String extracted[] = common.SQLquery(query, parameters, columnResults,-1,null);
         sendTo = extracted[0];
         if(sendTo == null){
               NotRecognizedLabel.setText("We don't recognize that username, try again!"); 
@@ -487,7 +487,7 @@ public class SignUp extends javax.swing.JFrame {
         String saltString = Base64.getEncoder().encodeToString(salt);//need it?
         String[] parameter = {savePassword,saltString,inputUsername};
         
-        common.SQLquery(query, parameter, columnResults, true,2,salt);
+        common.SQLquery(query, parameter,2,salt);
             
     }//GEN-LAST:event_NewPasswordButtonActionPerformed
 
@@ -516,7 +516,7 @@ public class SignUp extends javax.swing.JFrame {
         String saltString = Base64.getEncoder().encodeToString(salt); //do i need this?
         String[] parameters = {saltString};
         String[] columnResults = {"password"};
-        String[] extracted = common.SQLquery(query, parameters, columnResults, false, 1,salt);
+        String[] extracted = common.SQLquery(query, parameters, columnResults,  1,salt);
         String SQLhashPassword = extracted[0];
         
         if(SQLhashPassword.equals(popUpHash)){
@@ -526,7 +526,7 @@ public class SignUp extends javax.swing.JFrame {
                 String hashInputPassword =common.hashPassword(String.valueOf(YourPasswordField1.getPassword()), salt);
                 saltString = Base64.getEncoder().encodeToString(salt); 
                 String[] variables = {hashInputPassword ,saltString};
-                common.SQLquery(statement, variables, columnResults, true, 2,salt);
+                common.SQLquery(statement, variables, 2,salt);
                 ErrorLabel.setText("Your password has been changed!");
                 new open().setVisible(true);
                 this.setVisible(false);

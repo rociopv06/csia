@@ -54,7 +54,7 @@ public class In extends javax.swing.JFrame {
         String[] answers = null;
         String[] parameters = {statusToDisplay};
         String[] columnResults = {"name","id"};
-        answers = common.SQLquery(query, parameters, columnResults, false, -1,null);
+        answers = common.SQLquery(query, parameters, columnResults, -1,null);
         return answers;
     }
 
@@ -732,14 +732,14 @@ public class In extends javax.swing.JFrame {
                 + "startSubmissions, startForum, startVoting, endVoting, status) VALUES (?,?,?,?,?,?,?,?)";
         String[] parameters = {contestName.getText(), votesNumber.getSelectedItem().toString(),votesNumber.getSelectedItem().toString()
         ,subStart.getText(),forumStarts.getText(),votingStarts.getText(),votingEnds.getText(), "submission" };
-        common.SQLquery(query, parameters, null, true, -1,null);
+        common.SQLquery(query, parameters, null, -1,null);
         query = "SELECT * FROM Contests where name = ?, startSubmissions = ?";
         String[] Parameter = {contestName.getText(), subStart.getText()};
         String[] columnResults2 = {"id"};
-        String[] data = common.SQLquery(query, Parameter, columnResults2, false, -1,null);
+        String[] data = common.SQLquery(query, Parameter, columnResults2, -1,null);
         query = "INSERT INTO VotesperContest(contestID, userVotes, userMaxVotes) VALUES (?,?,?)";
         String[] parameters2 = {data[0], "",votesNumber.getSelectedItem().toString()};
-        common.SQLquery(query, parameters2, null, true, -1, null);
+        common.SQLquery(query, parameters2, null, -1, null);
         confirmation.setVisible(false);
         newContestDialog.setVisible(false);
     }//GEN-LAST:event_CreateContestActionPerformed
@@ -779,7 +779,7 @@ public class In extends javax.swing.JFrame {
         String query = "SELECT * FROM Contests WHERE name = ?";
         String[] parameters = {String.valueOf(displayedContest.getText())};
         String[] columnResults = {"id"};
-        String[] id = common.SQLquery(query, parameters, columnResults, false, -1,null);
+        String[] id = common.SQLquery(query, parameters, columnResults, -1,null);
         common.contestID = id[0];
         String status = String.valueOf(currentStatus.getSelectedItem());
         switch (status) {
@@ -807,7 +807,7 @@ public class In extends javax.swing.JFrame {
            
             String[] columnResults = {"document"};
             String[] parameters = {common.tiedTitles[0],DisplayContest("emergency")[1]};
-            String[] extracted = common.SQLquery(query, parameters, columnResults, false, -1, null);
+            String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
             byte[] extract = Base64.getDecoder().decode(extracted[0]);
             ByteArrayInputStream bis = new ByteArrayInputStream(extract);
             try {
@@ -823,7 +823,7 @@ public class In extends javax.swing.JFrame {
             submission1.setIcon(newImage);
             String[] columnResults2 = {"document"};
             String[] parameters2 = {common.tiedTitles[1],DisplayContest("emergency")[1]};
-            String[] extracted2 = common.SQLquery(query, parameters2, columnResults2, false, -1, null);
+            String[] extracted2 = common.SQLquery(query, parameters2, columnResults2, -1, null);
             byte[] extract2 = Base64.getDecoder().decode(extracted2[0]);
             ByteArrayInputStream bis2 = new ByteArrayInputStream(extract2);
             try {
@@ -844,16 +844,16 @@ public class In extends javax.swing.JFrame {
         String query =  "SELECT * FROM VotesperSubmission WHERE titleSubmission = ? AND contestID = ?";
         String[] columnResults = {"votes"};
         String[] parameters = {common.tiedTitles[0] , DisplayContest("emergency")[1]};
-        String[] stringVotes = common.SQLquery(query, parameters, columnResults, false, -1, null);
+        String[] stringVotes = common.SQLquery(query, parameters, columnResults, -1, null);
         int votes = Integer.parseInt(stringVotes[0]);
         votes++;
         stringVotes[0] = Integer.toString(votes);
         query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
         String[] parameter2 = {stringVotes[0],common.tiedTitles[0] , DisplayContest("emergency")[1]};
-        common.SQLquery(query, parameter2, null, true, -1, null);
+        common.SQLquery(query, parameter2, -1, null);
         query = "UPDATE Contests SET status = ? WHERE name = ? ";
         String[] parameters2 = {"voting", DisplayContest("emergency")[0]};
-        common.SQLquery(query, parameters2, null, true, -1, null);
+        common.SQLquery(query, parameters2, -1, null);
         emergencyState.setVisible(false);
     }//GEN-LAST:event_submissionB1ActionPerformed
 
@@ -861,16 +861,16 @@ public class In extends javax.swing.JFrame {
         String query =  "SELECT * FROM VotesperSubmission WHERE titleSubmission = ? AND contestID = ?";
         String[] columnResults = {"votes"};
         String[] parameters = {common.tiedTitles[1] , DisplayContest("emergency")[1]};
-        String[] stringVotes = common.SQLquery(query, parameters, columnResults, false, -1, null);
+        String[] stringVotes = common.SQLquery(query, parameters, columnResults, -1, null);
         int votes = Integer.parseInt(stringVotes[0]);
         votes++;
         stringVotes[0] = Integer.toString(votes);
         query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
         String[] parameter2 = {stringVotes[0], common.tiedTitles[1] , DisplayContest("emergency")[1]};
-        common.SQLquery(query, parameter2, null, true, -1, null);
+        common.SQLquery(query, parameter2, -1, null);
         query = "UPDATE Contests SET status = ? WHERE name = ? ";
         String[] parameters2 = {"voting", DisplayContest("emergency")[0]};
-        common.SQLquery(query, parameters2, null, true, -1, null);
+        common.SQLquery(query, parameters2, -1, null);
         emergencyState.setVisible(false);
     }//GEN-LAST:event_submissionB2ActionPerformed
 

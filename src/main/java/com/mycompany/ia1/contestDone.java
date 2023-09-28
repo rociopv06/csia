@@ -13,7 +13,7 @@ public class contestDone extends javax.swing.JFrame {
     String query = "SELECT * FROM VotesperSubmission WHERE contestID = ?  ORDER BY CONVERT(votes, UNSIGNED) DESC";
     String[] columnResult = {"userSubmitted", "votes"};
     String[] parameters = {common.contestID};
-    String[] winners = common.SQLquery(query, parameters, columnResult, false, -1, null);
+    String[] winners = common.SQLquery(query, parameters, columnResult,  -1, null);
 
     /**
      * Creates new form contestDone

@@ -30,7 +30,7 @@ public class contestVoting extends javax.swing.JFrame {
         String[] parameters ={common.contestID};
         String[] columnResults = {"title"};
             
-        String[] extracted = common.SQLquery(query, parameters, columnResults, false, -1, null);
+        String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
         titles.setModel(new javax.swing.DefaultComboBoxModel<>(extracted));
         
         votesLeft.setText("Votes left: "+ calculateVotesLeft());
@@ -39,7 +39,7 @@ public class contestVoting extends javax.swing.JFrame {
         String query = "SELECT * FROM VotesperContest WHERE contestID = ?"; 
         String[] parameters2 = {common.contestID};
         String[] columnResults2 = {"userVotes","userMaxVotes"};
-        String[] extracted2 = common.SQLquery(query, parameters2, columnResults2, false, -1, null);
+        String[] extracted2 = common.SQLquery(query, parameters2, columnResults2,  -1, null);
         System.out.println("extracted " + extracted2[0]+" "+extracted2[1]);
         if(extracted2[0]!=null){
             personalVotesLeft = Integer.parseInt(extracted2[1]) - Pattern.compile(common.currentUser).matcher(extracted2[0]).results().count();
@@ -183,7 +183,7 @@ public class contestVoting extends javax.swing.JFrame {
            
             String[] columnResults = {"document"};
             String[] parameters = {String.valueOf(titles.getSelectedItem()),common.contestID};
-            String[] extracted = common.SQLquery(query, parameters, columnResults, false, -1, null);
+            String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
             byte[] extract = Base64.getDecoder().decode(extracted[0]);
             ByteArrayInputStream bis = new ByteArrayInputStream(extract);
             try {
@@ -207,17 +207,17 @@ public class contestVoting extends javax.swing.JFrame {
             String query =  "SELECT * FROM VotesperSubmission WHERE titleSubmission = ? AND contestID = ?";
             String[] columnResults = {"votes"};
             String[] parameters = {String.valueOf(titles.getSelectedItem()) , common.contestID};
-            String[] stringVotes = common.SQLquery(query, parameters, columnResults, false, -1, null);
+            String[] stringVotes = common.SQLquery(query, parameters, columnResults,  -1, null);
             int votes = Integer.parseInt(stringVotes[0]);
             votes++;
             stringVotes[0] = Integer.toString(votes);
             query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
             String[] parameter2 = {stringVotes[0],String.valueOf(titles.getSelectedItem()) , common.contestID};
-            common.SQLquery(query, parameter2, null, true, -1, null);
+            common.SQLquery(query, parameter2, -1, null);
             query = "UPDATE VotesperContest SET userVotes = CONCAT(COALESCE(userVotes, ''), ?) WHERE contestID = ?";
             String[] parameter3 = {common.currentUser, common.contestID};
             System.out.println("AAAAAAAAAA "+ common.currentUser);
-            common.SQLquery(query, parameter3, null, true, -1, null);
+            common.SQLquery(query, parameter3, -1, null);
             votesLeft.setText("Votes left: "+ calculateVotesLeft());
         }
         else{

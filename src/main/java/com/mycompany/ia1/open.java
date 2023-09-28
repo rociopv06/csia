@@ -253,7 +253,7 @@ public class open extends javax.swing.JFrame {
         byte[] salt = null;
         String[] parameters = {UsernameField.getText()};
         String[] columnTitles = {"password","salt"};
-        String[] extracted = common.SQLquery(query, parameters, columnTitles,false,-1,null);
+        String[] extracted = common.SQLquery(query, parameters, columnTitles,-1,null);
   
        
         SQLhashPassword = extracted[0];

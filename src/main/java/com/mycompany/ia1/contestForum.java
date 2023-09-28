@@ -29,7 +29,7 @@ public class contestForum extends javax.swing.JFrame {
             String query = "SELECT * FROM ForumReports WHERE titleReport = ?"; 
             String[] parameters2 = {titleReport[currentReport]};
             String[] columnResults2 = {"bodyReport","userSubmitted","userVoted", "votesDelete", "votesKeep"};   
-            String[] extracted = common.SQLquery(query, parameters2, columnResults2, false, -1, null);
+            String[] extracted = common.SQLquery(query, parameters2, columnResults2, -1, null);
             titleReportLabel.setText(titleReport[currentReport] + " report. Reported by " + extracted[1]);
             bodyReport.setText(extracted[0]);
             Delete.setText("Delete - "+ extracted[3]);
@@ -47,7 +47,7 @@ public class contestForum extends javax.swing.JFrame {
         String query = "SELECT * FROM ForumReports WHERE titleReport = ?"; 
         String[] parameters = {titleReport[currentReport]};
         String[] columnResults = {votesType, "userVoted"};   
-        String[] extracted = common.SQLquery(query, parameters, columnResults, false, -1, null);
+        String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
         
         if(extracted[1].contains(common.currentUser)){
             updateLabel.setText("Vote already casted");
@@ -58,7 +58,7 @@ public class contestForum extends javax.swing.JFrame {
             String votesUpdate = Integer.toString(votes);
             query = "UPDATE ForumReports SET "+ votesType + " = ?, userVoted = CONCAT(userVoted, ?) WHERE titleReport = ?";
             String[] parameter = {votesUpdate,common.currentUser, titleReport[currentReport]};
-            common.SQLquery(query, parameter, null, true,-1,null);
+            common.SQLquery(query, parameter, null, -1,null);
             updateLabel.setText("Vote casted!");
             if(votesType.equals("votesKeep")){
                 Keep.setText("Keep - "+ votesUpdate);
@@ -70,14 +70,14 @@ public class contestForum extends javax.swing.JFrame {
         query = "SELECT * FROM ForumReports WHERE titleReport = ?"; 
         String[] parameters2 = {titleReport[currentReport]};
         String[] columnResults2 = {"votesKeep", "votesDelete"};   
-        extracted = common.SQLquery(query, parameters2, columnResults2, false, -1, null);
+        extracted = common.SQLquery(query, parameters2, columnResults2, -1, null);
         String pass = "yes";
         if (Integer.parseInt(extracted[0])<Integer.parseInt(extracted[1])){
             pass = "no";
         }
         query = "UPDATE ForumReports SET  pass=?  WHERE titleReport = ?";
         String[] parameters3 = {pass,titleReport[currentReport]};
-        common.SQLquery(query, parameters3, null, true,-1,null);
+        common.SQLquery(query, parameters3, null,-1,null);
     }
     
     public contestForum() {
@@ -85,7 +85,7 @@ public class contestForum extends javax.swing.JFrame {
         String query = "SELECT * FROM ForumReports WHERE contestID = ?"; 
         String[] parameters ={common.contestID};
         String[] columnResults = {"titleReport"};   
-        titleReport = common.SQLquery(query, parameters, columnResults, false, -1, null);
+        titleReport = common.SQLquery(query, parameters, columnResults, -1, null);
         setReport();
         
     }
@@ -443,7 +443,7 @@ public class contestForum extends javax.swing.JFrame {
             String[] parameters ={common.contestID};
             String[] columnResults = {"title"};
             
-            String[] extracted = common.SQLquery(query, parameters, columnResults, false, -1, null);
+            String[] extracted = common.SQLquery(query, parameters, columnResults,  -1, null);
             titles.setModel(new javax.swing.DefaultComboBoxModel<>(extracted));
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
@@ -453,7 +453,7 @@ public class contestForum extends javax.swing.JFrame {
             int[] dimensions = {800,500};
             String[] parameters ={String.valueOf(titles.getSelectedItem())};
             String[] columnResults = {"document"};
-            String[] extracted = common.SQLquery(query, parameters, columnResults, false, -1, null);
+            String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
             byte[] extract = Base64.getDecoder().decode(extracted[0]);
             ByteArrayInputStream bis = new ByteArrayInputStream(extract);
             try {
@@ -483,7 +483,7 @@ public class contestForum extends javax.swing.JFrame {
         String query = "SELECT * FROM Submissions WHERE contestID = ?"; 
         String[] parameters ={common.contestID};
         String[] columnResults = {"title"};   
-        String[] extracted = common.SQLquery(query, parameters, columnResults, false, -1, null);
+        String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
         titlesSubmissionsReport.setModel(new javax.swing.DefaultComboBoxModel<>(extracted));
     }//GEN-LAST:event_openNewReportActionPerformed
 
@@ -494,7 +494,7 @@ public class contestForum extends javax.swing.JFrame {
     private void submitReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitReportActionPerformed
         String statement = "INSERT INTO ForumReports (contestID,titleReport,bodyReport,userSubmitted,userVoted,votesDelete,votesKeep) VALUES (?,?,?,?,?,?,?)";
         String[] parameters = {common.contestID, String.valueOf(titlesSubmissionsReport.getSelectedItem()), String.valueOf(bodyReportTextField.getText()),common.currentUser,"","0","0"};
-        common.SQLquery(statement, parameters, null, true, -1, null);
+        common.SQLquery(statement, parameters, null,-1, null);
         jLabel4.setText("Report sent, screen will close in a few seconds!");
         try {
             Thread.sleep(3000);

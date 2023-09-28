@@ -181,16 +181,16 @@ public class contestSubmission extends javax.swing.JFrame {
         String query = "SELECT * FROM Submissions WHERE contestID = ?";
         String[] parameters = {common.contestID};
         String[] columnResults = {"title"};
-        String usedTitles[] = common.SQLquery(query, parameters, columnResults, false, -1, null);
+        String usedTitles[] = common.SQLquery(query, parameters, columnResults, -1, null);
         List<String> alreadyUsedTitles = Arrays.asList(usedTitles);
         query = "SELECT * FROM Submissions WHERE contestID = ? AND username = ?";
         String[] parameters2 = {common.contestID,common.currentUser};
         String[] column = {"title"};
-        String[] pastSubmissions = common.SQLquery(query, parameters2, column, false, -1, null);
+        String[] pastSubmissions = common.SQLquery(query, parameters2, column, -1, null);
         query = "SELECT * FROM Contests WHERE id = ?";
         String[] parameters3 = {common.contestID};
         String[] column2 = {"maxSubmissions"};
-        String[] maxSubmissions = common.SQLquery(query, parameters3, column2, false, -1, null);
+        String[] maxSubmissions = common.SQLquery(query, parameters3, column2,  -1, null);
         if(String.valueOf(Title.getText()).equals("")){
             warningText.setText("Please write a title");
         }
@@ -206,7 +206,7 @@ public class contestSubmission extends javax.swing.JFrame {
             String documentString = Base64.getEncoder().encodeToString(documents);
             String[] parameter = {common.contestID, common.currentUser,documentString, String.valueOf(Title.getText())};
             System.out.println( "length" + parameter.length);
-            common.SQLquery(query, parameter, null, true, 3, documents);
+            common.SQLquery(query, parameter, null, 3, documents);
             warningText.setText("Submitted!");
         }
     }//GEN-LAST:event_fileGetterActionPerformed

@@ -36,17 +36,18 @@ import javax.mail.internet.MimeMessage;
 public class common {
     public static String[] tiedTitles={"",""};
     public static String contestID;
+    
     public static void updateStatus(){
         String query = "SELECT * FROM Contests";
         String[] columnResults = {"name"};
         String[] empty = {};
-        String[] names = common.SQLquery(query, empty, columnResults, false, -1,null);
+        String[] names = common.SQLquery(query, empty, columnResults, -1,null);
        
         for(int i = 0; i<names.length;i++){
             query = "SELECT * FROM Contests where name = ?";
             String[] parameters = {names[i]};
             String[] columnResults2 = {"status", "startForum", "startVoting","endVoting","id"};
-            String[] data = common.SQLquery(query, parameters, columnResults2, false, -1,null);
+            String[] data = common.SQLquery(query, parameters, columnResults2,  -1,null);
             String status = data[0];
             LocalDate startForum = turnLocalDate(data[1]);
             LocalDate startVoting = turnLocalDate(data[2]);
@@ -65,7 +66,7 @@ public class common {
                     String[] columnToDelete = {"titleReport"};
                     String[] parameter = {contestID};
                     
-                    String[] namesToDelete = common.SQLquery(query, parameter, columnToDelete, false, -1, null);
+                    String[] namesToDelete = common.SQLquery(query, parameter, columnToDelete, -1, null);
                     System.out.println("LOOK HERE");
                     System.out.println("names to delete"+ namesToDelete[0]);
                     updatedStatus = "voting"; //possible bug here if the date passes and then it does not update
@@ -75,7 +76,7 @@ public class common {
                         String[] answers = null;
                         String[] parameterss = {nameToDelete, contestID};
                         String[] columnResultss = {"username"};
-                        String[] usernameToDelete = common.SQLquery(query, parameterss, columnResultss, false, -1,null);
+                        String[] usernameToDelete = common.SQLquery(query, parameterss, columnResultss, -1,null);
                         System.out.println(nameToDelete);
                         System.out.println(contestID);
                         String from = "tolkiensocietyvoting@gmail.com";
@@ -83,7 +84,7 @@ public class common {
                         query = "SELECT * FROM TolkienSociety WHERE username = ?";
                         String[] parameterss2 = {usernameToDelete[0]};
                         String[] columnResultss2 = {"email"};
-                        String[] sendTo = common.SQLquery(query, parameterss2, columnResultss2, false, -1,null);
+                        String[] sendTo = common.SQLquery(query, parameterss2, columnResultss2, -1,null);
                         String to = sendTo[0];
 
    
@@ -94,17 +95,17 @@ public class common {
                         query = "DELETE FROM Submissions WHERE title=? AND contestID=?";
                         String[] parameters3 = {nameToDelete, contestID};
                         System.out.println("deleted all this"+ nameToDelete);
-                        common.SQLquery(query, parameters3, null, true, -1, null);
+                        common.SQLquery(query, parameters3, null, -1, null);
                         
                     }
                     query = "SELECT * FROM Submissions WHERE contestID = ?";
                     String[] parameters4 = {contestID};
                     String[] columns = {"contestID","title","username"};
-                    String[] retrieved = common.SQLquery(query, parameters4, columns, false,-1,null);
+                    String[] retrieved = common.SQLquery(query, parameters4, columns,-1,null);
                     for(int j = 0; j<retrieved.length;j+=3){
                         query = "INSERT INTO VotesperSubmission (contestID,titleSubmission,userSubmitted,votes) VALUES (?,?,?,?)";
                         String[] parameters5 = {retrieved[j],retrieved[j+1],retrieved[j],"0"};
-                        common.SQLquery(query, parameters5, null, true, -1, null);
+                        common.SQLquery(query, parameters5, null, -1, null);
                     }
                 }
                 
@@ -114,7 +115,7 @@ public class common {
                     query = "SELECT * FROM VotesperSubmission WHERE contestID = ?  ORDER BY CONVERT(votes, UNSIGNED)";
                     String[] columnResult = {"votes", "titleSubmission"};
                     String[] parameters1 = {contestID};
-                    String[] winners = common.SQLquery(query, parameters1, columnResult, false, -1, null);
+                    String[] winners = common.SQLquery(query, parameters1, columnResult,  -1, null);
                     
                     if(winners[0].equals(winners[2])){
                         updatedStatus = "emergency";//possible bug here if the date passes and then it does not update
@@ -125,7 +126,7 @@ public class common {
                         query = "SELECT * FROM TolkienSociety WHERE username = ?";
                         String[] parameterss2 = {"president"};
                         String[] columnResultss2 = {"email"};
-                        String[] sendTo = common.SQLquery(query, parameterss2, columnResultss2, false, -1,null);
+                        String[] sendTo = common.SQLquery(query, parameterss2, columnResultss2, -1,null);
                         String to = sendTo[0];
 
    
@@ -140,7 +141,7 @@ public class common {
                         query = "SELECT * FROM TolkienSociety WHERE username = ?";
                         String[] parameterss2 = {"president"};
                         String[] columnResultss2 = {"email"};
-                        String[] sendTo = common.SQLquery(query, parameterss2, columnResultss2, false, -1,null);
+                        String[] sendTo = common.SQLquery(query, parameterss2, columnResultss2, -1,null);
                         String to = sendTo[0];
 
    
@@ -176,7 +177,7 @@ public class common {
             if(!updatedStatus.equals("")){
                 query = "UPDATE Contests SET status = ? WHERE name = ? ";
                 String[] parameters2 = {updatedStatus, names[i]};
-                common.SQLquery(query, parameters2, null, true, -1, null);
+                common.SQLquery(query, parameters2, null, -1, null);
             }
             
         }
@@ -276,7 +277,7 @@ public class common {
         
         
     }
-    public static String[] SQLquery(String query, String[] parameters, String[] columnResults, boolean Update, int bytesPosition, byte[] Byte){
+    public static String[] SQLquery(String query, String[] parameters, String[] columnResults, int bytesPosition, byte[] Byte){
         System.out.println("begin sql");
         PreparedStatement ps;
         ArrayList<String>  extracted = new ArrayList<>(10);
@@ -297,7 +298,7 @@ public class common {
                 
                 
             }
-            if(!Update){
+           
                 System.out.println("is it rs?");
                 ResultSet rs = ps.executeQuery();
                 //int j = 0;
@@ -323,11 +324,7 @@ public class common {
                 System.out.println("return");
                 String[] extractedArray = extracted.toArray(String[]::new);
                 return(extractedArray);
-            }
-            else{
-                ps.executeUpdate();
-                System.out.print("updated");
-            }
+  
             
             
             
@@ -338,6 +335,29 @@ public class common {
         return null;
     }
     
+    public static void SQLquery(String query, String[] parameters, int bytesPosition, byte[] Byte){
+        System.out.println("begin sql");
+        PreparedStatement ps;
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver"); 
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mysql","root", "Secure1$");
+            ps = conn.prepareStatement(query);
+            for (int i = 1; i<=parameters.length;i++){
+                if(i == bytesPosition){
+                    System.out.println("is it salt?");
+                    ps.setBytes(i,Byte);
+                }
+                else{
+                    System.out.println("is it the other characters?");
+                    ps.setString(i,parameters[i-1]);
+                }
+            }
+            ps.executeUpdate();
+            System.out.print("updated");
+            }catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
     
     public static String hashPassword(String password, byte[] salt){
         

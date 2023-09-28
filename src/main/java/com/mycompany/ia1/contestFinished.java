@@ -18,7 +18,7 @@ public class contestFinished extends javax.swing.JFrame {
         String query = "SELECT * FROM Winners WHERE contestID = ?";
         String[] columnResults = {"name","first","second","third"};
         String[] parameters = {common.contestID};
-        String[] extracted = common.SQLquery(query, parameters, columnResults, false, -1, null);
+        String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
         contestName.setText(extracted[0]);
         first.setText(extracted[1]);
         second.setText(extracted[2]);
