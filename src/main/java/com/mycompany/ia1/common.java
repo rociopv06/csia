@@ -287,51 +287,30 @@ public class common {
             ps = conn.prepareStatement(query);
             for (int i = 1; i<=parameters.length;i++){
                 if(i == bytesPosition){
-                    System.out.println("is it salt?");
                     ps.setBytes(i,Byte);
                 }
-                
                 else{
-                    System.out.println("is it the other characters?");
                     ps.setString(i,parameters[i-1]);
-                }
-                
-                
+                } 
             }
-           
-                System.out.println("is it rs?");
                 ResultSet rs = ps.executeQuery();
-                //int j = 0;
                 while (rs.next()) {
                     for (String columnResult : columnResults) {
-                        
                         if("salt".equals(columnResult)|| "document".equals(columnResult)){
                             byte[] Bytes = rs.getBytes(columnResult);
-                            //extracted.set(j,Base64.getEncoder().encodeToString(Bytes));
                             extracted.add(Base64.getEncoder().encodeToString(Bytes));
-                            System.out.println("salt was extracted");
-                            System.out.println("original salt: "+ Arrays.toString(rs.getBytes(columnResult)));
                         }
                         else{
-                            //extracted.set(j,rs.getString(columnResult)) ;
                             extracted.add(rs.getString(columnResult));
-                            System.out.println("other column was extracted");
                         }
-                        //j++;
                     }
 
                 }
-                System.out.println("return");
                 String[] extractedArray = extracted.toArray(String[]::new);
                 return(extractedArray);
-  
-            
-            
-            
             }catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
         return null;
     }
     
@@ -344,11 +323,9 @@ public class common {
             ps = conn.prepareStatement(query);
             for (int i = 1; i<=parameters.length;i++){
                 if(i == bytesPosition){
-                    System.out.println("is it salt?");
                     ps.setBytes(i,Byte);
                 }
                 else{
-                    System.out.println("is it the other characters?");
                     ps.setString(i,parameters[i-1]);
                 }
             }
@@ -360,7 +337,6 @@ public class common {
     }
     
     public static String hashPassword(String password, byte[] salt){
-        
         String hash = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

@@ -5,7 +5,7 @@
 package com.mycompany.ia1;
 
 
-import java.awt.Color;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -225,24 +225,20 @@ public class open extends javax.swing.JFrame {
     private void UsernameFieldMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UsernameFieldMouseExited
         if("".equals(UsernameField.getText())){
             UsernameField.setText("Username");
-            
         }
     }//GEN-LAST:event_UsernameFieldMouseExited
 
     private void PasswordFieldMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PasswordFieldMouseEntered
-       //PasswordField.setText("");//need to rework this because can't compare for security
+
        
     }//GEN-LAST:event_PasswordFieldMouseEntered
 
     private void PasswordFieldMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PasswordFieldMouseExited
-        //if(PasswordField.getPassword()==null){
-        //    PasswordField.setText("iiiiiiii");
-        //}
+
     }//GEN-LAST:event_PasswordFieldMouseExited
     private boolean allowLogin (String passwordInput, String passwordDesired, byte[] salt){
         passwordInput = common.hashPassword(String.valueOf(PasswordField.getPassword()),salt);
         if(passwordDesired.equals(passwordInput)){
-            
            return true;
         }
         return false;
