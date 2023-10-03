@@ -24,7 +24,6 @@ public class contestDone extends javax.swing.JFrame {
         int pos = 1;
   
             while (currentWinner <= winners.length){
-                
                 jTextArea1.append( "In position number " + pos + " user " + winners[currentWinner-1] + " with " + winners[currentWinner]+ " votes \n" );
                 currentWinner +=2;
                 pos++;
