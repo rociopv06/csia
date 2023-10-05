@@ -439,7 +439,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="42" green="45" red="43" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="To create your account: "/>
+            <Property name="text" type="java.lang.String" value="To create or reset your account&apos;s password: "/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">

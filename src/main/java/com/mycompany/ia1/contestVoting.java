@@ -27,23 +27,22 @@ public class contestVoting extends javax.swing.JFrame {
         
         initComponents();
         String query = "SELECT * FROM Submissions WHERE contestID = ?"; 
-        String[] parameters ={common.contestID};
+        String[] parameters ={Common.contestID};
         String[] columnResults = {"title"};
             
-        String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
+        String[] extracted = Common.SQLquery(query, parameters, columnResults, -1, null);
         titles.setModel(new javax.swing.DefaultComboBoxModel<>(extracted));
         
         votesLeft.setText("Votes left: "+ calculateVotesLeft());
     }
     private long calculateVotesLeft(){
         String query = "SELECT * FROM VotesperContest WHERE contestID = ?"; 
-        String[] parameters2 = {common.contestID};
+        String[] parameters2 = {Common.contestID};
         String[] columnResults2 = {"userVotes","userMaxVotes"};
-        String[] extracted2 = common.SQLquery(query, parameters2, columnResults2,  -1, null);
+        String[] extracted2 = Common.SQLquery(query, parameters2, columnResults2,  -1, null);
         System.out.println("extracted " + extracted2[0]+" "+extracted2[1]);
         if(extracted2[0]!=null){
-            personalVotesLeft = Integer.parseInt(extracted2[1]) - Pattern.compile(common.currentUser).matcher(extracted2[0]).results().count();
-
+            personalVotesLeft = Integer.parseInt(extracted2[1]) - Pattern.compile(Common.currentUser).matcher(extracted2[0]).results().count();
         }
         else{
             personalVotesLeft = Integer.parseInt(extracted2[1]);
@@ -178,16 +177,16 @@ public class contestVoting extends javax.swing.JFrame {
     }//GEN-LAST:event_backActionPerformed
 
     private void titlesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titlesActionPerformed
-        String query = "SELECT * FROM Submissions WHERE title = ? AND contestID = ?"; 
+        /*String query = "SELECT * FROM Submissions WHERE title = ? AND contestID = ?"; 
             int[] dimensions = {800,500};
            
             String[] columnResults = {"document"};
-            String[] parameters = {String.valueOf(titles.getSelectedItem()),common.contestID};
-            String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
+            String[] parameters = {String.valueOf(titles.getSelectedItem()),Common.contestID};
+            String[] extracted = Common.SQLquery(query, parameters, columnResults, -1, null);
             byte[] extract = Base64.getDecoder().decode(extracted[0]);
             ByteArrayInputStream bis = new ByteArrayInputStream(extract);
             try {
-                dimensions = common.reziseProportionally( ImageIO.read(bis), 800, 1000) ;
+                dimensions = Common.reziseProportionally( ImageIO.read(bis), 800, 1000) ;
             } catch (IOException ex) {
                 Logger.getLogger(contestForum.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -195,29 +194,29 @@ public class contestVoting extends javax.swing.JFrame {
             Image img = image.getImage();
             System.out.println("dimensions" + dimensions[0]+ dimensions[1]);
             Image scaledImg = img.getScaledInstance(dimensions[0], dimensions[1],Image.SCALE_SMOOTH);
-            ImageIcon newImage = new ImageIcon(scaledImg);
-            imageDisplayer.setIcon(newImage);
+            ImageIcon newImage = new ImageIcon(scaledImg);*/
+            Submissions submission = new Submissions(String.valueOf(titles.getSelectedItem()));
+            imageDisplayer.setIcon(submission.displaySubmission(800,500));
     }//GEN-LAST:event_titlesActionPerformed
 
     private void voteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voteButtonActionPerformed
-        //YALLA userVoted =  
+         
         personalVotesLeft = calculateVotesLeft();
         votesLeft.setText("Votes left: "+ calculateVotesLeft());
         if(personalVotesLeft>0){
             String query =  "SELECT * FROM VotesperSubmission WHERE titleSubmission = ? AND contestID = ?";
             String[] columnResults = {"votes"};
-            String[] parameters = {String.valueOf(titles.getSelectedItem()) , common.contestID};
-            String[] stringVotes = common.SQLquery(query, parameters, columnResults,  -1, null);
+            String[] parameters = {String.valueOf(titles.getSelectedItem()) , Common.contestID};
+            String[] stringVotes = Common.SQLquery(query, parameters, columnResults,  -1, null);
             int votes = Integer.parseInt(stringVotes[0]);
-            votes++;
-            stringVotes[0] = Integer.toString(votes);
+            stringVotes[0] = Integer.toString(votes++);
             query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
-            String[] parameter2 = {stringVotes[0],String.valueOf(titles.getSelectedItem()) , common.contestID};
-            common.SQLquery(query, parameter2, -1, null);
+            String[] parameter2 = {stringVotes[0],String.valueOf(titles.getSelectedItem()) , Common.contestID};
+            Common.SQLquery(query, parameter2, -1, null);
             query = "UPDATE VotesperContest SET userVotes = CONCAT(COALESCE(userVotes, ''), ?) WHERE contestID = ?";
-            String[] parameter3 = {common.currentUser, common.contestID};
-            System.out.println("AAAAAAAAAA "+ common.currentUser);
-            common.SQLquery(query, parameter3, -1, null);
+            String[] parameter3 = {Common.currentUser, Common.contestID};
+            
+            Common.SQLquery(query, parameter3, -1, null);
             votesLeft.setText("Votes left: "+ calculateVotesLeft());
         }
         else{

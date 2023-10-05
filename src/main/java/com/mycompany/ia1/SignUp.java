@@ -219,9 +219,7 @@ public class SignUp extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(226, 202, 163));
-        setMaximumSize(new java.awt.Dimension(800, 500));
         setMinimumSize(new java.awt.Dimension(800, 500));
-        setPreferredSize(new java.awt.Dimension(800, 500));
 
         jPanel1.setBackground(new java.awt.Color(226, 202, 163));
         jPanel1.setMaximumSize(new java.awt.Dimension(800, 500));
@@ -261,7 +259,7 @@ public class SignUp extends javax.swing.JFrame {
         });
 
         jLabel2.setForeground(new java.awt.Color(67, 69, 66));
-        jLabel2.setText("To create your account: ");
+        jLabel2.setText("To create or reset your account's password: ");
 
         jLabel3.setForeground(new java.awt.Color(67, 69, 66));
         jLabel3.setText("You will get sent an email with a temporal password to log in");
@@ -411,7 +409,7 @@ public class SignUp extends javax.swing.JFrame {
         NotRecognizedLabel.setText(" ");
         String[] parameters = {inputUsername};
         String[] columnResults = {"email"};
-        String extracted[] = common.SQLquery(query, parameters, columnResults,-1,null);
+        String extracted[] = Common.SQLquery(query, parameters, columnResults,-1,null);
         sendTo = extracted[0];
         if(sendTo == null){
               NotRecognizedLabel.setText("We don't recognize that username, try again!"); 
@@ -423,7 +421,7 @@ public class SignUp extends javax.swing.JFrame {
                 String to = sendTo;
                 String text = "Thank you for joining the Tolkien /n This is your temporal password: "+tempPassword;
                 String subject = "Your temporal Tolkien password!";
-                boolean work = common.sendEmail(from, password, to, text, subject);
+                boolean work = Common.sendEmail(from, password, to, text, subject);
                 if (work == true){
                     NotRecognizedLabel.setText("Sent to "+ sendTo +" check spam!"); 
                     InYourEmail.setText(inputUsername + " copy and paste your temporal password from " + sendTo);
@@ -438,56 +436,13 @@ public class SignUp extends javax.swing.JFrame {
                     NotRecognizedLabel.setText("Unexpected error, try again!"); 
                 }
                     
-                    
-
-      
-                /*Session session;
-                MimeMessage message;
-                Properties props;
-                props = new Properties();
-
-                props.put("mail.smtp.host", "smtp.gmail.com"); 
-                props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-                props.setProperty("mail.smtp.starttls.enable", "true"); 
-                props.setProperty("mail.smtp.port", "587"); 
-                props.setProperty("mall.smtp.user",from); 
-                props.setProperty("mail.smtp.ssl.protocols","TLSv1.2"); 
-                props.setProperty("mail.smtp.auth", "true");
-
-                session = Session.getDefaultInstance(props,new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(from, password);
-                    }
-                });   
-
-                try {
-                    message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress(from));
-                    message.setReplyTo( InternetAddress.parse( from ) );
-                    message.setRecipient(Message.RecipientType.TO, new InternetAddress (to));
-                    message.setSubject("Your temporal Tolkien password!");
-                    message.setText("Thank you for joining the Tolkien /n This is your temporal password: "+tempPassword);
-                    Transport transport;
-                    transport = session.getTransport("smtp");
-                    transport.connect(to, password);
-                    transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
-                    transport.close();
-                    NotRecognizedLabel.setText("Sent to "+ sendTo +" check spam!"); 
-                    InYourEmail.setText(inputUsername + " copy and paste your temporal password from " + sendTo);
-                    jDialog1.setVisible(true);
-                
-                } catch (AddressException ex ) {
-                Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (MessagingException ex) {
-                Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
-                }*/
         }
         query = "UPDATE TolkienSociety SET password = ?, salt = ? WHERE username = ? ";
-        String savePassword = common.hashPassword(tempPassword, salt);
+        String savePassword = Common.hashPassword(tempPassword, salt);
         String saltString = Base64.getEncoder().encodeToString(salt);//need it?
         String[] parameter = {savePassword,saltString,inputUsername};
         
-        common.SQLquery(query, parameter,2,salt);
+        Common.SQLquery(query, parameter,2,salt);
             
     }//GEN-LAST:event_NewPasswordButtonActionPerformed
 
@@ -506,29 +461,29 @@ public class SignUp extends javax.swing.JFrame {
     private void BackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButtonActionPerformed
         this.setVisible(false);
         jDialog1.setVisible(false);
-        new open().setVisible(true);
+        new SignIn().setVisible(true);
     }//GEN-LAST:event_BackButtonActionPerformed
 
     private void SetPassword1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SetPassword1ActionPerformed
         String popUpInput = String.valueOf(PopUpTempPassword.getText()); 
-        String popUpHash = common.hashPassword(popUpInput,salt); 
+        String popUpHash = Common.hashPassword(popUpInput,salt); 
         String query = "SELECT * FROM TolkienSociety WHERE salt = ?";
         String saltString = Base64.getEncoder().encodeToString(salt); //do i need this?
         String[] parameters = {saltString};
         String[] columnResults = {"password"};
-        String[] extracted = common.SQLquery(query, parameters, columnResults,  1,salt);
+        String[] extracted = Common.SQLquery(query, parameters, columnResults,  1,salt);
         String SQLhashPassword = extracted[0];
         
         if(SQLhashPassword.equals(popUpHash)){
             if(String.valueOf(YourPasswordField1.getPassword()).equals(String.valueOf(YourPasswordField2.getPassword()))){
              
                 String statement = "UPDATE TolkienSociety SET password = ? WHERE salt = ? ";
-                String hashInputPassword =common.hashPassword(String.valueOf(YourPasswordField1.getPassword()), salt);
+                String hashInputPassword =Common.hashPassword(String.valueOf(YourPasswordField1.getPassword()), salt);
                 saltString = Base64.getEncoder().encodeToString(salt); 
                 String[] variables = {hashInputPassword ,saltString};
-                common.SQLquery(statement, variables, 2,salt);
+                Common.SQLquery(statement, variables, 2,salt);
                 ErrorLabel.setText("Your password has been changed!");
-                new open().setVisible(true);
+                new SignIn().setVisible(true);
                 this.setVisible(false);
                 jDialog1.setVisible(false);
             }

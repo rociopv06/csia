@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -28,12 +27,13 @@ public class In extends javax.swing.JFrame {
     int numContest = 0;
     String[] nameContest = null;
     public In() {
+        
         initComponents();
-        common.updateStatus(); 
-        presidentOnly.setVisible(common.isPresident());
-        presidentOnly.enableInputMethods(common.isPresident());
-        emergency.setVisible(common.isPresident());
-        emergency.enableInputMethods(common.isPresident());
+        Common.updateStatus(); 
+        presidentOnly.setVisible(Common.isPresident());
+        presidentOnly.enableInputMethods(Common.isPresident());
+        emergency.setVisible(Common.isPresident());
+        emergency.enableInputMethods(Common.isPresident());
         nameContest = DisplayContest(String.valueOf(currentStatus.getSelectedItem()));
         System.out.println("NAME CONTEST "+ Arrays.toString(nameContest));
         if(nameContest.length>0){
@@ -42,19 +42,15 @@ public class In extends javax.swing.JFrame {
         else{
             displayedContest.setText("No contests in this state currently");
         }
- 
-        
-       
-            
-        
-       
+   
     }
+    
     private String[] DisplayContest(String statusToDisplay){
         String query = "SELECT * FROM Contests WHERE status = ?";
         String[] answers = null;
         String[] parameters = {statusToDisplay};
         String[] columnResults = {"name","id"};
-        answers = common.SQLquery(query, parameters, columnResults, -1,null);
+        answers = Common.SQLquery(query, parameters, columnResults, -1,null);
         return answers;
     }
 
@@ -594,9 +590,8 @@ public class In extends javax.swing.JFrame {
             }
         });
 
-        emergency.setBackground(new java.awt.Color(200, 60, 60));
         emergency.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        emergency.setForeground(new java.awt.Color(255, 255, 255));
+        emergency.setForeground(new java.awt.Color(200, 60, 60));
         emergency.setText("EMERGENCY VOTING");
         emergency.setToolTipText("");
         emergency.setMaximumSize(new java.awt.Dimension(107, 23));
@@ -698,7 +693,7 @@ public class In extends javax.swing.JFrame {
 
     private void CreateContestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateContestButtonActionPerformed
         
-        if(common.validDates(subStart.getText(),forumStarts.getText(),votingStarts.getText(),votingEnds.getText())){
+        if(Common.validDates(subStart.getText(),forumStarts.getText(),votingStarts.getText(),votingEnds.getText())){
         jLabel13.setText("Check that all the values are right before creating!");
         ConfirmationNameOfContest.setText("Name of contest: " + contestName.getText());
         ConfirmationSubStarts.setText("Submission start: " + subStart.getText());
@@ -732,14 +727,14 @@ public class In extends javax.swing.JFrame {
                 + "startSubmissions, startForum, startVoting, endVoting, status) VALUES (?,?,?,?,?,?,?,?)";
         String[] parameters = {contestName.getText(), votesNumber.getSelectedItem().toString(),votesNumber.getSelectedItem().toString()
         ,subStart.getText(),forumStarts.getText(),votingStarts.getText(),votingEnds.getText(), "submission" };
-        common.SQLquery(query, parameters, null, -1,null);
+        Common.SQLquery(query, parameters, null, -1,null);
         query = "SELECT * FROM Contests where name = ?, startSubmissions = ?";
         String[] Parameter = {contestName.getText(), subStart.getText()};
         String[] columnResults2 = {"id"};
-        String[] data = common.SQLquery(query, Parameter, columnResults2, -1,null);
+        String[] data = Common.SQLquery(query, Parameter, columnResults2, -1,null);
         query = "INSERT INTO VotesperContest(contestID, userVotes, userMaxVotes) VALUES (?,?,?)";
         String[] parameters2 = {data[0], "",votesNumber.getSelectedItem().toString()};
-        common.SQLquery(query, parameters2, null, -1, null);
+        Common.SQLquery(query, parameters2, null, -1, null);
         confirmation.setVisible(false);
         newContestDialog.setVisible(false);
     }//GEN-LAST:event_CreateContestActionPerformed
@@ -779,14 +774,14 @@ public class In extends javax.swing.JFrame {
         String query = "SELECT * FROM Contests WHERE name = ?";
         String[] parameters = {String.valueOf(displayedContest.getText())};
         String[] columnResults = {"id"};
-        String[] id = common.SQLquery(query, parameters, columnResults, -1,null);
-        common.contestID = id[0];
+        String[] id = Common.SQLquery(query, parameters, columnResults, -1,null);
+        Common.contestID = id[0];
         String status = String.valueOf(currentStatus.getSelectedItem());
         switch (status) {
             case "submission" -> new contestSubmission().setVisible(true);
             case "forum" -> new contestForum().setVisible(true);
             case "voting" -> new contestVoting().setVisible(true);
-            case "finished" -> new contestDone().setVisible(true);
+            case "finished" -> new contestFinished().setVisible(true);
           
             default -> {
             }
@@ -796,22 +791,26 @@ public class In extends javax.swing.JFrame {
 
     private void LogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutActionPerformed
         this.setVisible(false);
-        new open().setVisible(true);
+        new SignIn().setVisible(true);
     }//GEN-LAST:event_LogOutActionPerformed
 
     private void emergencyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emergencyActionPerformed
         
-        jLabel14.setText("Tie breaker for "+ DisplayContest("emergency")[0]);
-          String query = "SELECT * FROM Submissions WHERE title = ? AND contestID = ?"; 
+        jLabel14.setText("Tie breaker for "+ DisplayContest("emergency")[0]);//assumes only one contest in emergency
+        Submissions submission = new Submissions(Common.tiedTitles[0]);
+        submission1.setIcon(submission.displaySubmission(800,500));
+        Submissions submissionn = new Submissions(Common.tiedTitles[1]);
+        submission2.setIcon(submissionn.displaySubmission(800,500));
+          /*String query = "SELECT * FROM Submissions WHERE title = ? AND contestID = ?"; 
             int[] dimensions = {800,500};
            
             String[] columnResults = {"document"};
-            String[] parameters = {common.tiedTitles[0],DisplayContest("emergency")[1]};
-            String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
+            String[] parameters = {Common.tiedTitles[0],DisplayContest("emergency")[1]};
+            String[] extracted = Common.SQLquery(query, parameters, columnResults, -1, null);
             byte[] extract = Base64.getDecoder().decode(extracted[0]);
             ByteArrayInputStream bis = new ByteArrayInputStream(extract);
             try {
-                dimensions = common.reziseProportionally( ImageIO.read(bis), 800, 1000) ;
+                dimensions = Common.reziseProportionally( ImageIO.read(bis), 800, 1000) ;
             } catch (IOException ex) {
                 Logger.getLogger(contestForum.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -822,12 +821,12 @@ public class In extends javax.swing.JFrame {
             ImageIcon newImage = new ImageIcon(scaledImg);
             submission1.setIcon(newImage);
             String[] columnResults2 = {"document"};
-            String[] parameters2 = {common.tiedTitles[1],DisplayContest("emergency")[1]};
-            String[] extracted2 = common.SQLquery(query, parameters2, columnResults2, -1, null);
+            String[] parameters2 = {Common.tiedTitles[1],DisplayContest("emergency")[1]};
+            String[] extracted2 = Common.SQLquery(query, parameters2, columnResults2, -1, null);
             byte[] extract2 = Base64.getDecoder().decode(extracted2[0]);
             ByteArrayInputStream bis2 = new ByteArrayInputStream(extract2);
             try {
-                dimensions = common.reziseProportionally( ImageIO.read(bis2), 800, 1000) ;
+                dimensions = Common.reziseProportionally( ImageIO.read(bis2), 800, 1000) ;
             } catch (IOException ex) {
                 Logger.getLogger(contestForum.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -836,41 +835,42 @@ public class In extends javax.swing.JFrame {
             System.out.println("dimensions" + dimensions[0]+ dimensions[1]);
             Image scaledImg2 = img2.getScaledInstance(dimensions[0], dimensions[1],Image.SCALE_SMOOTH);
             ImageIcon newImage2 = new ImageIcon(scaledImg2);
-            submission2.setIcon(newImage2);
+            submission2.setIcon(newImage2);*/
+           
           emergencyState.setVisible(true);
     }//GEN-LAST:event_emergencyActionPerformed
 
     private void submissionB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submissionB1ActionPerformed
         String query =  "SELECT * FROM VotesperSubmission WHERE titleSubmission = ? AND contestID = ?";
         String[] columnResults = {"votes"};
-        String[] parameters = {common.tiedTitles[0] , DisplayContest("emergency")[1]};
-        String[] stringVotes = common.SQLquery(query, parameters, columnResults, -1, null);
+        String[] parameters = {Common.tiedTitles[0] , DisplayContest("emergency")[1]};
+        String[] stringVotes = Common.SQLquery(query, parameters, columnResults, -1, null);
         int votes = Integer.parseInt(stringVotes[0]);
         votes++;
         stringVotes[0] = Integer.toString(votes);
         query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
-        String[] parameter2 = {stringVotes[0],common.tiedTitles[0] , DisplayContest("emergency")[1]};
-        common.SQLquery(query, parameter2, -1, null);
+        String[] parameter2 = {stringVotes[0],Common.tiedTitles[0] , DisplayContest("emergency")[1]};
+        Common.SQLquery(query, parameter2, -1, null);
         query = "UPDATE Contests SET status = ? WHERE name = ? ";
         String[] parameters2 = {"voting", DisplayContest("emergency")[0]};
-        common.SQLquery(query, parameters2, -1, null);
+        Common.SQLquery(query, parameters2, -1, null);
         emergencyState.setVisible(false);
     }//GEN-LAST:event_submissionB1ActionPerformed
 
     private void submissionB2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submissionB2ActionPerformed
         String query =  "SELECT * FROM VotesperSubmission WHERE titleSubmission = ? AND contestID = ?";
         String[] columnResults = {"votes"};
-        String[] parameters = {common.tiedTitles[1] , DisplayContest("emergency")[1]};
-        String[] stringVotes = common.SQLquery(query, parameters, columnResults, -1, null);
+        String[] parameters = {Common.tiedTitles[1] , DisplayContest("emergency")[1]};
+        String[] stringVotes = Common.SQLquery(query, parameters, columnResults, -1, null);
         int votes = Integer.parseInt(stringVotes[0]);
         votes++;
         stringVotes[0] = Integer.toString(votes);
         query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
-        String[] parameter2 = {stringVotes[0], common.tiedTitles[1] , DisplayContest("emergency")[1]};
-        common.SQLquery(query, parameter2, -1, null);
+        String[] parameter2 = {stringVotes[0], Common.tiedTitles[1] , DisplayContest("emergency")[1]};
+        Common.SQLquery(query, parameter2, -1, null);
         query = "UPDATE Contests SET status = ? WHERE name = ? ";
         String[] parameters2 = {"voting", DisplayContest("emergency")[0]};
-        common.SQLquery(query, parameters2, -1, null);
+        Common.SQLquery(query, parameters2, -1, null);
         emergencyState.setVisible(false);
     }//GEN-LAST:event_submissionB2ActionPerformed
 

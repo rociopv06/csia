@@ -24,16 +24,23 @@ public class contestForum extends javax.swing.JFrame {
      */
     int currentReport = 0;
     String[] titleReport;
+    ForumReport report = new ForumReport();
     private void setReport(){
         if (titleReport.length!=0){
-            String query = "SELECT * FROM ForumReports WHERE titleReport = ?"; 
+            /*String query = "SELECT * FROM ForumReports WHERE titleReport = ?"; 
             String[] parameters2 = {titleReport[currentReport]};
-            String[] columnResults2 = {"bodyReport","userSubmitted","userVoted", "votesDelete", "votesKeep"};   
-            String[] extracted = common.SQLquery(query, parameters2, columnResults2, -1, null);
+            String[] columnResults2 = {"bodyReport","userSubmitted","userVoted", "votesDelete", "votesKeep"};
+            report.setForumReport(titleReport[currentReport]);
+            String[] extracted = Common.SQLquery(query, parameters2, columnResults2, -1, null);
             titleReportLabel.setText(titleReport[currentReport] + " report. Reported by " + extracted[1]);
             bodyReport.setText(extracted[0]);
             Delete.setText("Delete - "+ extracted[3]);
-            Keep.setText("Keep - "+ extracted[4]);
+            Keep.setText("Keep - "+ extracted[4]);*/
+            report.setForumReport(titleReport[currentReport]);
+            titleReportLabel.setText(titleReport[currentReport] + " report. Reported by " + report.getUserSubmitted());
+            bodyReport.setText(report.getBody());
+            Delete.setText("Delete - "+ report.getVotesDelete());
+            Keep.setText("Keep - "+ report.getVotesKeep());
         }
         else{
             titleReportLabel.setText("no reports made yet");
@@ -43,13 +50,13 @@ public class contestForum extends javax.swing.JFrame {
         }
       
     }
-    private void submitVote(String votesType){
+    /*private void submitVote(String votesType){
         String query = "SELECT * FROM ForumReports WHERE titleReport = ?"; 
         String[] parameters = {titleReport[currentReport]};
         String[] columnResults = {votesType, "userVoted"};   
-        String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
+        String[] extracted = Common.SQLquery(query, parameters, columnResults, -1, null);
         
-        if(extracted[1].contains(common.currentUser)){
+        if(extracted[1].contains(Common.currentUser)){
             updateLabel.setText("Vote already casted");
         }
         else {
@@ -57,8 +64,8 @@ public class contestForum extends javax.swing.JFrame {
             votes++;
             String votesUpdate = Integer.toString(votes);
             query = "UPDATE ForumReports SET "+ votesType + " = ?, userVoted = CONCAT(userVoted, ?) WHERE titleReport = ?";
-            String[] parameter = {votesUpdate,common.currentUser, titleReport[currentReport]};
-            common.SQLquery(query, parameter, null, -1,null);
+            String[] parameter = {votesUpdate,Common.currentUser, titleReport[currentReport]};
+            Common.SQLquery(query, parameter, null, -1,null);
             updateLabel.setText("Vote casted!");
             if(votesType.equals("votesKeep")){
                 Keep.setText("Keep - "+ votesUpdate);
@@ -70,22 +77,22 @@ public class contestForum extends javax.swing.JFrame {
         query = "SELECT * FROM ForumReports WHERE titleReport = ?"; 
         String[] parameters2 = {titleReport[currentReport]};
         String[] columnResults2 = {"votesKeep", "votesDelete"};   
-        extracted = common.SQLquery(query, parameters2, columnResults2, -1, null);
+        extracted = Common.SQLquery(query, parameters2, columnResults2, -1, null);
         String pass = "yes";
         if (Integer.parseInt(extracted[0])<Integer.parseInt(extracted[1])){
             pass = "no";
         }
         query = "UPDATE ForumReports SET  pass=?  WHERE titleReport = ?";
         String[] parameters3 = {pass,titleReport[currentReport]};
-        common.SQLquery(query, parameters3, null,-1,null);
-    }
+        Common.SQLquery(query, parameters3, null,-1,null);
+    }*/
     
     public contestForum() {
         initComponents();
         String query = "SELECT * FROM ForumReports WHERE contestID = ?"; 
-        String[] parameters ={common.contestID};
+        String[] parameters ={Common.contestID};
         String[] columnResults = {"titleReport"};   
-        titleReport = common.SQLquery(query, parameters, columnResults, -1, null);
+        titleReport = Common.SQLquery(query, parameters, columnResults, -1, null);
         setReport();
         
     }
@@ -440,33 +447,35 @@ public class contestForum extends javax.swing.JFrame {
         if("view submissions".equals(String.valueOf(jComboBox1.getSelectedItem()))){
             viewSubmissions.setVisible(true);
             String query = "SELECT * FROM Submissions WHERE contestID = ?"; 
-            String[] parameters ={common.contestID};
+            String[] parameters ={Common.contestID};
             String[] columnResults = {"title"};
             
-            String[] extracted = common.SQLquery(query, parameters, columnResults,  -1, null);
+            String[] extracted = Common.SQLquery(query, parameters, columnResults,  -1, null);
             titles.setModel(new javax.swing.DefaultComboBoxModel<>(extracted));
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void titlesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titlesActionPerformed
-        String query = "SELECT * FROM Submissions WHERE title = ?"; 
-            int[] dimensions = {800,500};
-            String[] parameters ={String.valueOf(titles.getSelectedItem())};
-            String[] columnResults = {"document"};
-            String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
-            byte[] extract = Base64.getDecoder().decode(extracted[0]);
-            ByteArrayInputStream bis = new ByteArrayInputStream(extract);
-            try {
-                dimensions = common.reziseProportionally( ImageIO.read(bis), 800, 1000) ;
-            } catch (IOException ex) {
-                Logger.getLogger(contestForum.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            ImageIcon image = new ImageIcon(extract);
-            Image img = image.getImage();
-            System.out.println("dimensions" + dimensions[0]+ dimensions[1]);
-            Image scaledImg = img.getScaledInstance(dimensions[0], dimensions[1],Image.SCALE_SMOOTH);
-            ImageIcon newImage = new ImageIcon(scaledImg);
-            imageDisplayer.setIcon(newImage);
+        
+        /*String query = "SELECT * FROM Submissions WHERE title = ?"; 
+        int[] dimensions = {800,500};
+        String[] parameters ={String.valueOf(titles.getSelectedItem())};
+        String[] columnResults = {"document"};
+        String[] extracted = Common.SQLquery(query, parameters, columnResults, -1, null);
+        byte[] extract = Base64.getDecoder().decode(extracted[0]);
+        ByteArrayInputStream bis = new ByteArrayInputStream(extract);
+        try {
+            dimensions = Common.reziseProportionally( ImageIO.read(bis), 800, 1000) ;
+        } catch (IOException ex) {
+            Logger.getLogger(contestForum.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ImageIcon image = new ImageIcon(extract);
+        Image img = image.getImage();
+        System.out.println("dimensions" + dimensions[0]+ dimensions[1]);
+        Image scaledImg = img.getScaledInstance(dimensions[0], dimensions[1],Image.SCALE_SMOOTH);
+        ImageIcon newImage = new ImageIcon(scaledImg);*/
+        Submissions submission = new Submissions(String.valueOf(titles.getSelectedItem()));
+        imageDisplayer.setIcon(submission.displaySubmission(800,500));
     }//GEN-LAST:event_titlesActionPerformed
 
     private void backDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backDialogActionPerformed
@@ -481,9 +490,9 @@ public class contestForum extends javax.swing.JFrame {
     private void openNewReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openNewReportActionPerformed
         newReport.setVisible(true);
         String query = "SELECT * FROM Submissions WHERE contestID = ?"; 
-        String[] parameters ={common.contestID};
+        String[] parameters ={Common.contestID};
         String[] columnResults = {"title"};   
-        String[] extracted = common.SQLquery(query, parameters, columnResults, -1, null);
+        String[] extracted = Common.SQLquery(query, parameters, columnResults, -1, null);
         titlesSubmissionsReport.setModel(new javax.swing.DefaultComboBoxModel<>(extracted));
     }//GEN-LAST:event_openNewReportActionPerformed
 
@@ -493,14 +502,9 @@ public class contestForum extends javax.swing.JFrame {
 
     private void submitReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitReportActionPerformed
         String statement = "INSERT INTO ForumReports (contestID,titleReport,bodyReport,userSubmitted,userVoted,votesDelete,votesKeep) VALUES (?,?,?,?,?,?,?)";
-        String[] parameters = {common.contestID, String.valueOf(titlesSubmissionsReport.getSelectedItem()), String.valueOf(bodyReportTextField.getText()),common.currentUser,"","0","0"};
-        common.SQLquery(statement, parameters, null,-1, null);
-        jLabel4.setText("Report sent, screen will close in a few seconds!");
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }   
+        String[] parameters = {Common.contestID, String.valueOf(titlesSubmissionsReport.getSelectedItem()), String.valueOf(bodyReportTextField.getText()),Common.currentUser,"","0","0"};
+        Common.SQLquery(statement, parameters, null,-1, null);
+        jLabel4.setText("Report sent, screen will close soon!");  
         newReport.setVisible(false);
     }//GEN-LAST:event_submitReportActionPerformed
 
@@ -519,11 +523,27 @@ public class contestForum extends javax.swing.JFrame {
     }//GEN-LAST:event_pastReportActionPerformed
 
     private void KeepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KeepActionPerformed
-        submitVote("votesKeep");
+        //submitVote("votesKeep");
+        if(report.setVoteKeep()){
+            Keep.setText("Keep - "+ report.getVotesKeep());
+            updateLabel.setText("Vote casted!");
+        }
+        else{
+            updateLabel.setText("You already voted"); 
+        }
+        report.setPass();
     }//GEN-LAST:event_KeepActionPerformed
 
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
-        submitVote("votesDelete");
+        //submitVote("votesDelete");
+         if(report.setVoteDelete()){
+            Delete.setText("Delete - "+ report.getVotesDelete());
+            updateLabel.setText("Vote casted!");
+        }
+        else{
+            updateLabel.setText("You already voted"); 
+        }
+        report.setPass();
     }//GEN-LAST:event_DeleteActionPerformed
 
     /**

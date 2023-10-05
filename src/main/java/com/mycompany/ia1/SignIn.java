@@ -6,31 +6,23 @@ package com.mycompany.ia1;
 
 
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 
 /**
  *
  * @author rociopv
  */
-public class open extends javax.swing.JFrame {
+public class SignIn extends javax.swing.JFrame {
 
     /**
      * Creates new form open
      */
-    public open() {
-       
+    public SignIn() {
         initComponents();
-        
-        
     }   
 
     /**
@@ -218,7 +210,7 @@ public class open extends javax.swing.JFrame {
 
     private void UsernameFieldMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UsernameFieldMouseEntered
         if("Username".equals(UsernameField.getText())){
-        UsernameField.setText("");
+            UsernameField.setText("");
         }
     }//GEN-LAST:event_UsernameFieldMouseEntered
 
@@ -237,33 +229,25 @@ public class open extends javax.swing.JFrame {
 
     }//GEN-LAST:event_PasswordFieldMouseExited
     private boolean allowLogin (String passwordInput, String passwordDesired, byte[] salt){
-        passwordInput = common.hashPassword(String.valueOf(PasswordField.getPassword()),salt);
-        if(passwordDesired.equals(passwordInput)){
-           return true;
-        }
-        return false;
+        String passwordHashInput = Common.hashPassword(passwordInput,salt);
+        return passwordDesired.equals(passwordHashInput);
     }
     private void LogInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogInButtonActionPerformed
+        errorLabel.setText("Login has failed please try again"); // the code runs fast enough so that the user will only see this message if they dont succesfully login
         String query = "SELECT * FROM TolkienSociety WHERE username = ?";
         String SQLhashPassword = null;
         byte[] salt = null;
         String[] parameters = {UsernameField.getText()};
         String[] columnTitles = {"password","salt"};
-        String[] extracted = common.SQLquery(query, parameters, columnTitles,-1,null);
-  
-       
+        String[] extracted = Common.SQLquery(query, parameters, columnTitles,-1,null);
         SQLhashPassword = extracted[0];
         salt =  Base64.getDecoder().decode(extracted[1]);
-      
-        if(allowLogin(Arrays.toString(PasswordField.getPassword()), SQLhashPassword, salt)){
+        if(allowLogin(String.valueOf(PasswordField.getPassword()), SQLhashPassword, salt)){
             errorLabel.setText("Logging you in!");
-            common.currentUser = UsernameField.getText();
+            Common.currentUser = UsernameField.getText();
             this.setVisible(false);
             new In().setVisible(true);
-        }
-        else{
-            errorLabel.setText("Login has failed please try again");
-        }
+        }  
     }//GEN-LAST:event_LogInButtonActionPerformed
 
     private void ForgotPasswordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ForgotPasswordButtonActionPerformed
@@ -288,20 +272,21 @@ public class open extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(open.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SignIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(open.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SignIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(open.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SignIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(open.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SignIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new open().setVisible(true);
+                new SignIn().setVisible(true);
             }
         });
     }

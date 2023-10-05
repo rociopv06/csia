@@ -33,21 +33,22 @@ import javax.mail.internet.MimeMessage;
  *
  * @author rociopv
  */
-public class common {
+public class Common {
     public static String[] tiedTitles={"",""};
     public static String contestID;
+    public static String currentUser = "undefined";
     
     public static void updateStatus(){
         String query = "SELECT * FROM Contests";
         String[] columnResults = {"name"};
         String[] empty = {};
-        String[] names = common.SQLquery(query, empty, columnResults, -1,null);
+        String[] names = Common.SQLquery(query, empty, columnResults, -1,null);
        
         for(int i = 0; i<names.length;i++){
             query = "SELECT * FROM Contests where name = ?";
             String[] parameters = {names[i]};
             String[] columnResults2 = {"status", "startForum", "startVoting","endVoting","id"};
-            String[] data = common.SQLquery(query, parameters, columnResults2,  -1,null);
+            String[] data = Common.SQLquery(query, parameters, columnResults2,  -1,null);
             String status = data[0];
             LocalDate startForum = turnLocalDate(data[1]);
             LocalDate startVoting = turnLocalDate(data[2]);
@@ -55,134 +56,118 @@ public class common {
             LocalDate currentDate = LocalDate.now();
             contestID = (data[4]);
             String updatedStatus = "";
-            if(status.equals("submission")){
-                if(!currentDate.isBefore(startForum)){//not is after because I want true when they're equal
-                    updatedStatus = "forum"; //possible bug here if the date passes and then it does not update
+            switch (status) {
+                case "submission" -> {
+                    if(!currentDate.isBefore(startForum)){//not is after because I want true when they're equal
+                        updatedStatus = "forum"; //possible bug here if the date passes and then it does not update
+                    }
                 }
-            }
-            else if(status.equals("forum")){
-                if(!currentDate.isBefore(startVoting)){//not is after because I want true when they're equal
-                    query = "SELECT * FROM ForumReports WHERE pass = 'no'AND contestID = ?";
-                    String[] columnToDelete = {"titleReport"};
-                    String[] parameter = {contestID};
-                    
-                    String[] namesToDelete = common.SQLquery(query, parameter, columnToDelete, -1, null);
-                    System.out.println("LOOK HERE");
-                    System.out.println("names to delete"+ namesToDelete[0]);
-                    updatedStatus = "voting"; //possible bug here if the date passes and then it does not update
-                    for (String nameToDelete : namesToDelete) {
-                       
-                        query = "SELECT * FROM Submissions WHERE title = ? AND contestID = ?";
-                        String[] answers = null;
-                        String[] parameterss = {nameToDelete, contestID};
-                        String[] columnResultss = {"username"};
-                        String[] usernameToDelete = common.SQLquery(query, parameterss, columnResultss, -1,null);
-                        System.out.println(nameToDelete);
-                        System.out.println(contestID);
-                        String from = "tolkiensocietyvoting@gmail.com";
-                        String password = "kbzmnzeygouygmcj";
-                        query = "SELECT * FROM TolkienSociety WHERE username = ?";
-                        String[] parameterss2 = {usernameToDelete[0]};
-                        String[] columnResultss2 = {"email"};
-                        String[] sendTo = common.SQLquery(query, parameterss2, columnResultss2, -1,null);
-                        String to = sendTo[0];
-
-   
-                        String text = "Your submission "+ nameToDelete + "has been deleted from the competition for breaching the rules of the contest."
-                                + " This was decided in ademocratic process that occured during the forum period of the contest you submitted to";
-                        String subject = "Information about your submission to "+contestID;
-                        common.sendEmail(from, password, to, text, subject);
-                        query = "DELETE FROM Submissions WHERE title=? AND contestID=?";
-                        String[] parameters3 = {nameToDelete, contestID};
-                        System.out.println("deleted all this"+ nameToDelete);
-                        common.SQLquery(query, parameters3, null, -1, null);
+                case "forum" -> {
+                    if(!currentDate.isBefore(startVoting)){//not is after because I want true when they're equal
+                        query = "SELECT * FROM ForumReports WHERE pass = 'no'AND contestID = ?";
+                        String[] columnToDelete = {"titleReport"};
+                        String[] parameter = {contestID};
                         
-                    }
-                    query = "SELECT * FROM Submissions WHERE contestID = ?";
-                    String[] parameters4 = {contestID};
-                    String[] columns = {"contestID","title","username"};
-                    String[] retrieved = common.SQLquery(query, parameters4, columns,-1,null);
-                    for(int j = 0; j<retrieved.length;j+=3){
-                        query = "INSERT INTO VotesperSubmission (contestID,titleSubmission,userSubmitted,votes) VALUES (?,?,?,?)";
-                        String[] parameters5 = {retrieved[j],retrieved[j+1],retrieved[j],"0"};
-                        common.SQLquery(query, parameters5, null, -1, null);
+                        String[] namesToDelete = Common.SQLquery(query, parameter, columnToDelete, -1, null);
+                        updatedStatus = "voting"; //possible bug here if the date passes and then it does not update
+                        for (String nameToDelete : namesToDelete) {
+                            
+                            query = "SELECT * FROM Submissions WHERE title = ? AND contestID = ?";
+                            String[] answers = null;
+                            String[] parameterss = {nameToDelete, contestID};
+                            String[] columnResultss = {"username"};
+                            String[] usernameToDelete = Common.SQLquery(query, parameterss, columnResultss, -1,null);
+                            System.out.println(nameToDelete);
+                            System.out.println(contestID);
+                            String from = "tolkiensocietyvoting@gmail.com";
+                            String password = "kbzmnzeygouygmcj";
+                            query = "SELECT * FROM TolkienSociety WHERE username = ?";
+                            String[] parameterss2 = {usernameToDelete[0]};
+                            String[] columnResultss2 = {"email"};
+                            String[] sendTo = Common.SQLquery(query, parameterss2, columnResultss2, -1,null);
+                            String to = sendTo[0];
+                            
+                            
+                            String text = "Your submission "+ nameToDelete + "has been deleted from the competition for breaching the rules of the contest."
+                                    + " This was decided in ademocratic process that occured during the forum period of the contest you submitted to";
+                            String subject = "Information about your submission to "+contestID;
+                            Common.sendEmail(from, password, to, text, subject);
+                            query = "DELETE FROM Submissions WHERE title=? AND contestID=?";
+                            String[] parameters3 = {nameToDelete, contestID};
+                            System.out.println("deleted all this"+ nameToDelete);
+                            Common.SQLquery(query, parameters3, null, -1, null);
+                            
+                        }
+                        query = "SELECT * FROM Submissions WHERE contestID = ?";
+                        String[] parameters4 = {contestID};
+                        String[] columns = {"contestID","title","username"};
+                        String[] retrieved = Common.SQLquery(query, parameters4, columns,-1,null);
+                        for(int j = 0; j<retrieved.length;j+=3){
+                            query = "INSERT INTO VotesperSubmission (contestID,titleSubmission,userSubmitted,votes) VALUES (?,?,?,?)";
+                            String[] parameters5 = {retrieved[j],retrieved[j+1],retrieved[j],"0"};
+                            Common.SQLquery(query, parameters5, null, -1, null);
+                        }
                     }
                 }
-                
-            }
-            else if(status.equals("voting")){
-                if(!currentDate.isBefore(endVoting)){//not is after because I want true when they're equal
-                    query = "SELECT * FROM VotesperSubmission WHERE contestID = ?  ORDER BY CONVERT(votes, UNSIGNED)";
-                    String[] columnResult = {"votes", "titleSubmission"};
-                    String[] parameters1 = {contestID};
-                    String[] winners = common.SQLquery(query, parameters1, columnResult,  -1, null);
-                    
-                    if(winners[0].equals(winners[2])){
-                        updatedStatus = "emergency";//possible bug here if the date passes and then it does not update
-                        tiedTitles[0] = winners[1];
-                        tiedTitles[1] = winners[3];
-                        String from = "tolkiensocietyvoting@gmail.com";
-                        String password = "kbzmnzeygouygmcj";
-                        query = "SELECT * FROM TolkienSociety WHERE username = ?";
-                        String[] parameterss2 = {"president"};
-                        String[] columnResultss2 = {"email"};
-                        String[] sendTo = common.SQLquery(query, parameterss2, columnResultss2, -1,null);
-                        String to = sendTo[0];
-
-   
-                        String text = "Please open the Tolkien Society app immeadiately, there is a contest with a tie that you need to break";
-                        String subject = "Tie break for first place!";
-                        common.sendEmail(from, password, to, text, subject);
-                    }
-                    else if(winners[2].equals(winners[4])){
-                        updatedStatus = "emergency";//possible bug here if the date passes and then it does not update
-                        String from = "tolkiensocietyvoting@gmail.com";
-                        String password = "kbzmnzeygouygmcj";
-                        query = "SELECT * FROM TolkienSociety WHERE username = ?";
-                        String[] parameterss2 = {"president"};
-                        String[] columnResultss2 = {"email"};
-                        String[] sendTo = common.SQLquery(query, parameterss2, columnResultss2, -1,null);
-                        String to = sendTo[0];
-
-   
-                        String text = "Please open the Tolkien Society app immeadiately, there is a contest with a tie that you need to break";
-                        String subject = "Tie break for second place!";
-                        common.sendEmail(from, password, to, text, subject);
-                        tiedTitles[0] = winners[3];
-                        tiedTitles[1] = winners[5];
-                    }
-                    else{
+                case "voting" -> {
+                    if(!currentDate.isBefore(endVoting)){//not is after because I want true when they're equal
+                        query = "SELECT * FROM VotesperSubmission WHERE contestID = ?  ORDER BY CONVERT(votes, UNSIGNED)";
+                        String[] columnResult = {"votes", "titleSubmission"};
+                        String[] parameters1 = {contestID};
+                        String[] winners = Common.SQLquery(query, parameters1, columnResult,  -1, null);
                         
-        
-                        updatedStatus = "finished"; //possible bug here if the date passes and then it does not update
+                        if(winners[0].equals(winners[2])){
+                            updatedStatus = "emergency";//possible bug here if the date passes and then it does not update
+                            tiedTitles[0] = winners[1];
+                            tiedTitles[1] = winners[3];
+                            String from = "tolkiensocietyvoting@gmail.com";
+                            String password = "kbzmnzeygouygmcj";
+                            query = "SELECT * FROM TolkienSociety WHERE username = ?";
+                            String[] parameterss2 = {"president"};
+                            String[] columnResultss2 = {"email"};
+                            String[] sendTo = Common.SQLquery(query, parameterss2, columnResultss2, -1,null);
+                            String to = sendTo[0];
+                            
+                            
+                            String text = "Please open the Tolkien Society app immediately, there is a contest with a tie that you need to break";
+                            String subject = "Tie break for first place!";
+                            Common.sendEmail(from, password, to, text, subject);
+                        }
+                        else if(winners[2].equals(winners[4])){
+                            updatedStatus = "emergency";//possible bug here if the date passes and then it does not update
+                            String from = "tolkiensocietyvoting@gmail.com";
+                            String password = "kbzmnzeygouygmcj";
+                            query = "SELECT * FROM TolkienSociety WHERE username = ?";
+                            String[] parameterss2 = {"president"};
+                            String[] columnResultss2 = {"email"};
+                            String[] sendTo = Common.SQLquery(query, parameterss2, columnResultss2, -1,null);
+                            String to = sendTo[0];
+                            
+                            
+                            String text = "Please open the Tolkien Society app immediately, there is a contest with a tie that you need to break";
+                            String subject = "Tie break for second place!";
+                            Common.sendEmail(from, password, to, text, subject);
+                            tiedTitles[0] = winners[3];
+                            tiedTitles[1] = winners[5];
+                        }
+                        else{
+                            updatedStatus = "finished"; //possible bug here if the date passes and then it does not update
+                        }
+
                     }
-                    /*
-                    query = "SELECT * FROM VotesperSubmission WHERE contestID = "+contestID;
-                    String[] column = {"votes"};
-                    String[] stringVotes = common.SQLquery(query, null, column, false, -1, null);
-                    int[] votes = new int[stringVotes.length];
-                    for(int j = 0; j<stringVotes.length; j++){
-                        votes[j] = Integer.parseInt(stringVotes[j]);
-                    }
-                    Arrays.sort(votes);
-                    String secondVotes= Integer.toString(votes[votes.length-2]);
-                    String thirdVotes= Integer.toString(votes[votes.length-3]);
-                    query = "SELECT * FROM VotesperSubmission WHERE votes =" + Integer.toString(votes[votes.length-1]);
-                    String[] column2 = {"userSubmitted"};
-                    String[] firstUser = */
-                    
                 }
-                
+                default -> {
+                }
             }
             if(!updatedStatus.equals("")){
                 query = "UPDATE Contests SET status = ? WHERE name = ? ";
                 String[] parameters2 = {updatedStatus, names[i]};
-                common.SQLquery(query, parameters2, null, -1, null);
+                Common.SQLquery(query, parameters2, null, -1, null);
             }
             
         }
     }
-    public static String currentUser = "undefined";
+    
     public static boolean isPresident(){
         if(currentUser.equals("president")){
             return true;
