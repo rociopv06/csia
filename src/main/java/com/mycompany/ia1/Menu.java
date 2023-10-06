@@ -814,7 +814,7 @@ public class Menu extends javax.swing.JFrame {
             byte[] extract = Base64.getDecoder().decode(extracted[0]);
             ByteArrayInputStream bis = new ByteArrayInputStream(extract);
             try {
-                dimensions = Common.reziseProportionally( ImageIO.read(bis), 800, 1000) ;
+                dimensions = Common.resizeProportionally( ImageIO.read(bis), 800, 1000) ;
             } catch (IOException ex) {
                 Logger.getLogger(contestForum.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -830,7 +830,7 @@ public class Menu extends javax.swing.JFrame {
             byte[] extract2 = Base64.getDecoder().decode(extracted2[0]);
             ByteArrayInputStream bis2 = new ByteArrayInputStream(extract2);
             try {
-                dimensions = Common.reziseProportionally( ImageIO.read(bis2), 800, 1000) ;
+                dimensions = Common.resizeProportionally( ImageIO.read(bis2), 800, 1000) ;
             } catch (IOException ex) {
                 Logger.getLogger(contestForum.class.getName()).log(Level.SEVERE, null, ex);
             }

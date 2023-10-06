@@ -36,7 +36,7 @@ public class Submissions {
         int[] dimensions = {width,height};
         ByteArrayInputStream bis = new ByteArrayInputStream(document);
         try {
-            dimensions = Common.reziseProportionally( ImageIO.read(bis), 800, 1000) ;
+            dimensions = Common.resizeProportionally( ImageIO.read(bis), 800, 1000) ;
         } catch (IOException ex) {
             Logger.getLogger(contestForum.class.getName()).log(Level.SEVERE, null, ex);
         }

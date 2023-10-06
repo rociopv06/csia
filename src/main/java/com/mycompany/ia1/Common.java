@@ -218,7 +218,7 @@ public class Common {
         }
         return true;
     }
-    public static int[] reziseProportionally(BufferedImage img, int maxWidth, int maxHeight){
+    public static int[] resizeProportionally(BufferedImage img, int maxWidth, int maxHeight){
        int originalWidth = img.getWidth();
        int originalHeight = img.getHeight();
        int newWidth = originalWidth;

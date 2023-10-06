@@ -186,7 +186,7 @@ public class contestVoting extends javax.swing.JFrame {
             byte[] extract = Base64.getDecoder().decode(extracted[0]);
             ByteArrayInputStream bis = new ByteArrayInputStream(extract);
             try {
-                dimensions = Common.reziseProportionally( ImageIO.read(bis), 800, 1000) ;
+                dimensions = Common.resizeProportionally( ImageIO.read(bis), 800, 1000) ;
             } catch (IOException ex) {
                 Logger.getLogger(contestForum.class.getName()).log(Level.SEVERE, null, ex);
             }
