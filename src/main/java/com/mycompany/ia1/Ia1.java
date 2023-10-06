@@ -11,7 +11,7 @@ package com.mycompany.ia1;
 public class Ia1 {
 
     public static void main(String[] args) {
-        new SignIn().setVisible(true);
+        new Login().setVisible(true);
     }
     
 }

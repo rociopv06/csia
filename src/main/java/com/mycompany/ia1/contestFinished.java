@@ -110,7 +110,7 @@ public class contestFinished extends javax.swing.JFrame {
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         this.setVisible(false);
-        new In().setVisible(true);
+        new Menu().setVisible(true);
     }//GEN-LAST:event_backActionPerformed
 
     /**

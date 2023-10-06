@@ -461,7 +461,7 @@ public class SignUp extends javax.swing.JFrame {
     private void BackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButtonActionPerformed
         this.setVisible(false);
         jDialog1.setVisible(false);
-        new SignIn().setVisible(true);
+        new Login().setVisible(true);
     }//GEN-LAST:event_BackButtonActionPerformed
 
     private void SetPassword1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SetPassword1ActionPerformed
@@ -483,7 +483,7 @@ public class SignUp extends javax.swing.JFrame {
                 String[] variables = {hashInputPassword ,saltString};
                 Common.SQLquery(statement, variables, 2,salt);
                 ErrorLabel.setText("Your password has been changed!");
-                new SignIn().setVisible(true);
+                new Login().setVisible(true);
                 this.setVisible(false);
                 jDialog1.setVisible(false);
             }

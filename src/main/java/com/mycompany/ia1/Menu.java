@@ -19,14 +19,14 @@ import javax.swing.ImageIcon;
  *
  * @author rociopv
  */
-public class In extends javax.swing.JFrame {
+public class Menu extends javax.swing.JFrame {
 
     /**
-     * Creates new form In
+     * Creates new form Menu
      */
     int numContest = 0;
     String[] nameContest = null;
-    public In() {
+    public Menu() {
         
         initComponents();
         Common.updateStatus(); 
@@ -74,8 +74,6 @@ public class In extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         contestName = new javax.swing.JTextField();
-        submissionNumber = new javax.swing.JComboBox<>();
-        jLabel8 = new javax.swing.JLabel();
         votesNumber = new javax.swing.JComboBox<>();
         votingEnds = new javax.swing.JFormattedTextField();
         jLabel9 = new javax.swing.JLabel();
@@ -87,6 +85,8 @@ public class In extends javax.swing.JFrame {
         votingStarts = new javax.swing.JFormattedTextField();
         CreateContestButton = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
+        submissionsNumber = new javax.swing.JComboBox<>();
+        jLabel16 = new javax.swing.JLabel();
         confirmation = new javax.swing.JDialog();
         jPanel2 = new javax.swing.JPanel();
         ConfirmationNameOfContest = new javax.swing.JLabel();
@@ -166,10 +166,6 @@ public class In extends javax.swing.JFrame {
             }
         });
 
-        submissionNumber.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4" }));
-
-        jLabel8.setText("Submission per person");
-
         votesNumber.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
         votesNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,6 +206,15 @@ public class In extends javax.swing.JFrame {
 
         jLabel13.setForeground(new java.awt.Color(255, 0, 0));
 
+        submissionsNumber.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        submissionsNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submissionsNumberActionPerformed(evt);
+            }
+        });
+
+        jLabel16.setText("Submissions per person");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -248,15 +253,15 @@ public class In extends javax.swing.JFrame {
                             .addComponent(CurrentDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(55, 55, 55)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
-                                        .addGap(36, 36, 36)
-                                        .addComponent(submissionNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
                                         .addComponent(jLabel9)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(votesNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(71, 71, 71)
+                                        .addComponent(votesNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel16)
+                                        .addGap(62, 62, 62)
+                                        .addComponent(submissionsNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(55, 55, 55)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -269,7 +274,7 @@ public class In extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(66, 66, 66)
                         .addComponent(contestName, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,13 +302,12 @@ public class In extends javax.swing.JFrame {
                     .addComponent(jLabel7)
                     .addComponent(jLabel10))
                 .addGap(89, 89, 89)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(submissionNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel12)
-                        .addComponent(linkRules, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(linkRules, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(submissionsNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(votesNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -516,7 +520,7 @@ public class In extends javax.swing.JFrame {
         jPanel1.setSize(new java.awt.Dimension(800, 500));
 
         presidentOnly.setBackground(new java.awt.Color(220, 239, 216));
-        presidentOnly.setText("Edit contests");
+        presidentOnly.setText("Create contest");
         presidentOnly.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 presidentOnlyActionPerformed(evt);
@@ -700,7 +704,7 @@ public class In extends javax.swing.JFrame {
         ConfirmationForumStarts.setText("Submission ends, Forum starts: "  + forumStarts.getText());
         ConfirmationVotingStarts.setText("Forum ends, Voting starts: " + votingStarts.getText());
         ConfirmationVotingEnds.setText("Voting ends: " + votingEnds.getText());
-        ConfirmationSubmissions.setText("Submissions per person: " + submissionNumber.getSelectedItem().toString());
+        ConfirmationSubmissions.setText("Submissions per person: " + submissionsNumber.getSelectedItem().toString());
         ConfirmationVotes.setText("Votes per person: " + votesNumber.getSelectedItem().toString());
         ConfirmationRulesLink.setText("Link to rules: " + linkRules.getText());
         
@@ -725,7 +729,7 @@ public class In extends javax.swing.JFrame {
 
         String query = "INSERT INTO Contests (name,maxVotes,maxSubmissions, "
                 + "startSubmissions, startForum, startVoting, endVoting, status) VALUES (?,?,?,?,?,?,?,?)";
-        String[] parameters = {contestName.getText(), votesNumber.getSelectedItem().toString(),votesNumber.getSelectedItem().toString()
+        String[] parameters = {contestName.getText(), votesNumber.getSelectedItem().toString(),submissionsNumber.getSelectedItem().toString()
         ,subStart.getText(),forumStarts.getText(),votingStarts.getText(),votingEnds.getText(), "submission" };
         Common.SQLquery(query, parameters, null, -1,null);
         query = "SELECT * FROM Contests where name = ?, startSubmissions = ?";
@@ -791,7 +795,7 @@ public class In extends javax.swing.JFrame {
 
     private void LogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutActionPerformed
         this.setVisible(false);
-        new SignIn().setVisible(true);
+        new Login().setVisible(true);
     }//GEN-LAST:event_LogOutActionPerformed
 
     private void emergencyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emergencyActionPerformed
@@ -874,6 +878,10 @@ public class In extends javax.swing.JFrame {
         emergencyState.setVisible(false);
     }//GEN-LAST:event_submissionB2ActionPerformed
 
+    private void submissionsNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submissionsNumberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_submissionsNumberActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -891,20 +899,21 @@ public class In extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(In.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(In.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(In.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(In.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new In().setVisible(true);
+                new Menu().setVisible(true);
             }
         });
     }
@@ -938,13 +947,13 @@ public class In extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -962,7 +971,7 @@ public class In extends javax.swing.JFrame {
     private javax.swing.JLabel submission2;
     private javax.swing.JButton submissionB1;
     private javax.swing.JButton submissionB2;
-    private javax.swing.JComboBox<String> submissionNumber;
+    private javax.swing.JComboBox<String> submissionsNumber;
     private javax.swing.JComboBox<String> votesNumber;
     private javax.swing.JFormattedTextField votingEnds;
     private javax.swing.JFormattedTextField votingStarts;
