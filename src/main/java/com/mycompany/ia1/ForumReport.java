@@ -58,7 +58,7 @@ public class ForumReport {
         else {
             int votes = Integer.parseInt(votesKeep);
             votesKeep = Integer.toString(votes++);
-            String query = "UPDATE ForumReports SET votesKeep = ?, userVoted = CONCAT(userVoted, ?) WHERE titleReport = ?";
+            String query = "UPDATE ForumReports SET votesKeep = ?, userVoted = CONCAT(COALESCE(userVotes, ''), ?) WHERE titleReport = ?";
             String[] parameters = {votesKeep,Common.currentUser, title};
             Common.SQLquery(query, parameters, null, -1,null);
             return true;
@@ -73,7 +73,7 @@ public class ForumReport {
         else {
             int votes = Integer.parseInt(votesDelete);
             votesDelete = Integer.toString(votes++);
-            String query = "UPDATE ForumReports SET votesDelete = ?, userVoted = CONCAT(userVoted, ?) WHERE titleReport = ?";
+            String query = "UPDATE ForumReports SET votesDelete = ?, userVoted = CONCAT(COALESCE(userVotes, ''), ?) WHERE titleReport = ?";
             String[] parameters = {votesKeep,Common.currentUser, title};
             Common.SQLquery(query, parameters, null, -1,null);
             return true;

@@ -4,20 +4,18 @@
  */
 package com.mycompany.ia1;
 
-import static com.mycompany.ia1.SignUp.sendTo;
-import java.awt.Image;
+
+
 import java.awt.image.BufferedImage;
-import static java.lang.Integer.min;
+
 import java.util.*;
 import java.sql.*;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.List;
 import java.util.ArrayList;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -89,7 +87,7 @@ public class Common {
                             
                             
                             String text = "Your submission "+ nameToDelete + "has been deleted from the competition for breaching the rules of the contest."
-                                    + " This was decided in ademocratic process that occured during the forum period of the contest you submitted to";
+                                    + " This was decided in a democratic process that occured during the forum period of the contest you submitted to";
                             String subject = "Information about your submission to "+contestID;
                             Common.sendEmail(from, password, to, text, subject);
                             query = "DELETE FROM Submissions WHERE title=? AND contestID=?";
@@ -263,7 +261,7 @@ public class Common {
         
     }
     public static String[] SQLquery(String query, String[] parameters, String[] columnResults, int bytesPosition, byte[] Byte){
-        System.out.println("begin sql");
+  
         PreparedStatement ps;
         ArrayList<String>  extracted = new ArrayList<>(10);
         try{

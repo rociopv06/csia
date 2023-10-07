@@ -10,20 +10,11 @@ package com.mycompany.ia1;
  * @author rociopv
  */
 import java.util.*;
-import java.sql.*;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.Session;
-import javax.mail.internet.*;
-import javax.mail.Address;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Transport;
+
 public class SignUp extends javax.swing.JFrame {
 
     /**

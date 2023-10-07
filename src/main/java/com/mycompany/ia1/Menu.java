@@ -4,16 +4,10 @@
  */
 package com.mycompany.ia1;
 
-import java.awt.Image;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+
 
 /**
  *

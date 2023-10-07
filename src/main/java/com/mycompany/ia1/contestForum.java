@@ -4,14 +4,7 @@
  */
 package com.mycompany.ia1;
 
-import java.awt.Image;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+
 
 /**
  *
@@ -501,8 +494,8 @@ public class contestForum extends javax.swing.JFrame {
     }//GEN-LAST:event_backReportActionPerformed
 
     private void submitReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitReportActionPerformed
-        String statement = "INSERT INTO ForumReports (contestID,titleReport,bodyReport,userSubmitted,userVoted,votesDelete,votesKeep) VALUES (?,?,?,?,?,?,?)";
-        String[] parameters = {Common.contestID, String.valueOf(titlesSubmissionsReport.getSelectedItem()), String.valueOf(bodyReportTextField.getText()),Common.currentUser,"","0","0"};
+        String statement = "INSERT INTO ForumReports (contestID,titleReport,bodyReport,userSubmitted,votesDelete,votesKeep) VALUES (?,?,?,?,?,?,?)";
+        String[] parameters = {Common.contestID, String.valueOf(titlesSubmissionsReport.getSelectedItem()), String.valueOf(bodyReportTextField.getText()),Common.currentUser,"0","0"};
         Common.SQLquery(statement, parameters, null,-1, null);
         jLabel4.setText("Report sent, screen will close soon!");  
         newReport.setVisible(false);
