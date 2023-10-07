@@ -412,8 +412,8 @@ public class SignUp extends javax.swing.JFrame {
                 String to = sendTo;
                 String text = "Thank you for joining the Tolkien /n This is your temporal password: "+tempPassword;
                 String subject = "Your temporal Tolkien password!";
-                boolean work = Common.sendEmail( to, text, subject);
-                if (work){
+
+                if (Common.sendEmail( to, text, subject)){
                     NotRecognizedLabel.setText("Sent to "+ sendTo +" check spam!"); 
                     InYourEmail.setText(inputUsername + " copy and paste your temporal password from " + sendTo);
                     jDialog1.setVisible(true);

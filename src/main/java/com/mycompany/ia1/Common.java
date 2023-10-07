@@ -169,14 +169,17 @@ public class Common {
         if(currentUser.equals("president")){
             return true;
         }
-        
         else{
             return false;
         }
     }
-    public static boolean sendEmail( String to, String text, String subject){
+    public static boolean sendEmail(String to, String text, String subject){
         String from = "tolkiensocietyvoting@gmail.com";
         String password = "kbzmnzeygouygmcj";
+        //not the actual password for the gmail this is a App/device specific password
+        
+        //setting the properties of the port and password authentication
+        //it is assummed that the the host will have connection to the internet
         Session session;
         MimeMessage message;
         Properties props;
@@ -185,7 +188,7 @@ public class Common {
         props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         props.setProperty("mail.smtp.starttls.enable", "true"); 
         props.setProperty("mail.smtp.port", "587"); 
-        props.setProperty("mall.smtp.user",from); 
+        props.setProperty("mail.smtp.user",from); 
         props.setProperty("mail.smtp.ssl.protocols","TLSv1.2"); 
         props.setProperty("mail.smtp.auth", "true");
         session = Session.getDefaultInstance(props,new javax.mail.Authenticator() {
@@ -205,11 +208,8 @@ public class Common {
             transport.connect(to, password);
             transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
             transport.close();   
-        } catch (AddressException ex ) {
-            Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         } catch (MessagingException ex) {
-            Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Common.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
         return true;
@@ -259,7 +259,6 @@ public class Common {
         
     }
     public static String[] SQLquery(String query, String[] parameters, String[] columnResults, int bytesPosition, byte[] Byte){
-  
         PreparedStatement ps;
         ArrayList<String>  extracted = new ArrayList<>(10);
         try{
