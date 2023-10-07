@@ -412,15 +412,10 @@ public class SignUp extends javax.swing.JFrame {
                 String to = sendTo;
                 String text = "Thank you for joining the Tolkien /n This is your temporal password: "+tempPassword;
                 String subject = "Your temporal Tolkien password!";
-                boolean work = Common.sendEmail(from, password, to, text, subject);
-                if (work == true){
+                boolean work = Common.sendEmail( to, text, subject);
+                if (work){
                     NotRecognizedLabel.setText("Sent to "+ sendTo +" check spam!"); 
                     InYourEmail.setText(inputUsername + " copy and paste your temporal password from " + sendTo);
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
-                    }
                     jDialog1.setVisible(true);
                 }
                 else{

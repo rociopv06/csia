@@ -89,7 +89,7 @@ public class Common {
                             String text = "Your submission "+ nameToDelete + "has been deleted from the competition for breaching the rules of the contest."
                                     + " This was decided in a democratic process that occured during the forum period of the contest you submitted to";
                             String subject = "Information about your submission to "+contestID;
-                            Common.sendEmail(from, password, to, text, subject);
+                            Common.sendEmail(to, text, subject);
                             query = "DELETE FROM Submissions WHERE title=? AND contestID=?";
                             String[] parameters3 = {nameToDelete, contestID};
                             System.out.println("deleted all this"+ nameToDelete);
@@ -129,12 +129,11 @@ public class Common {
                             
                             String text = "Please open the Tolkien Society app immediately, there is a contest with a tie that you need to break";
                             String subject = "Tie break for first place!";
-                            Common.sendEmail(from, password, to, text, subject);
+                            Common.sendEmail(to, text, subject);
                         }
                         else if(winners[2].equals(winners[4])){
                             updatedStatus = "emergency";//possible bug here if the date passes and then it does not update
-                            String from = "tolkiensocietyvoting@gmail.com";
-                            String password = "kbzmnzeygouygmcj";
+                            
                             query = "SELECT * FROM TolkienSociety WHERE username = ?";
                             String[] parameterss2 = {"president"};
                             String[] columnResultss2 = {"email"};
@@ -144,7 +143,7 @@ public class Common {
                             
                             String text = "Please open the Tolkien Society app immediately, there is a contest with a tie that you need to break";
                             String subject = "Tie break for second place!";
-                            Common.sendEmail(from, password, to, text, subject);
+                            Common.sendEmail(to, text, subject);
                             tiedTitles[0] = winners[3];
                             tiedTitles[1] = winners[5];
                         }
@@ -170,16 +169,18 @@ public class Common {
         if(currentUser.equals("president")){
             return true;
         }
+        
         else{
             return false;
         }
     }
-    public static boolean sendEmail(String from, String password, String to, String text, String subject){
+    public static boolean sendEmail( String to, String text, String subject){
+        String from = "tolkiensocietyvoting@gmail.com";
+        String password = "kbzmnzeygouygmcj";
         Session session;
         MimeMessage message;
         Properties props;
         props = new Properties();
-
         props.put("mail.smtp.host", "smtp.gmail.com"); 
         props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         props.setProperty("mail.smtp.starttls.enable", "true"); 
@@ -187,13 +188,11 @@ public class Common {
         props.setProperty("mall.smtp.user",from); 
         props.setProperty("mail.smtp.ssl.protocols","TLSv1.2"); 
         props.setProperty("mail.smtp.auth", "true");
-
         session = Session.getDefaultInstance(props,new javax.mail.Authenticator() {
         protected PasswordAuthentication getPasswordAuthentication() {
             return new PasswordAuthentication(from, password);
             }
         });   
-
         try {
             message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
@@ -205,13 +204,12 @@ public class Common {
             transport = session.getTransport("smtp");
             transport.connect(to, password);
             transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
-            transport.close();
-                
+            transport.close();   
         } catch (AddressException ex ) {
-            //Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         } catch (MessagingException ex) {
-           // Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
         return true;
