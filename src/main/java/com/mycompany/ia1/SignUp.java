@@ -34,7 +34,7 @@ public class SignUp extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jDialog1 = new javax.swing.JDialog();
+        setNewPassword = new javax.swing.JDialog();
         jPanel2 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -65,10 +65,10 @@ public class SignUp extends javax.swing.JFrame {
         BackButton = new javax.swing.JButton();
         NotRecognizedLabel = new javax.swing.JLabel();
 
-        jDialog1.setAlwaysOnTop(true);
-        jDialog1.setBackground(new java.awt.Color(226, 202, 163));
-        jDialog1.setLocation(new java.awt.Point(0, 0));
-        jDialog1.setMinimumSize(new java.awt.Dimension(800, 500));
+        setNewPassword.setAlwaysOnTop(true);
+        setNewPassword.setBackground(new java.awt.Color(226, 202, 163));
+        setNewPassword.setLocation(new java.awt.Point(0, 0));
+        setNewPassword.setMinimumSize(new java.awt.Dimension(800, 500));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -190,20 +190,20 @@ public class SignUp extends javax.swing.JFrame {
                 .addGap(127, 127, 127))
         );
 
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog1Layout.createSequentialGroup()
+        javax.swing.GroupLayout setNewPasswordLayout = new javax.swing.GroupLayout(setNewPassword.getContentPane());
+        setNewPassword.getContentPane().setLayout(setNewPasswordLayout);
+        setNewPasswordLayout.setHorizontalGroup(
+            setNewPasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(setNewPasswordLayout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        setNewPasswordLayout.setVerticalGroup(
+            setNewPasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialog1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, setNewPasswordLayout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -407,8 +407,6 @@ public class SignUp extends javax.swing.JFrame {
               usernameField.setText("");
             }
             else{//send email
-                String from = "tolkiensocietyvoting@gmail.com";
-                String password = "kbzmnzeygouygmcj";
                 String to = sendTo;
                 String text = "Thank you for joining the Tolkien /n This is your temporal password: "+tempPassword;
                 String subject = "Your temporal Tolkien password!";
@@ -416,7 +414,7 @@ public class SignUp extends javax.swing.JFrame {
                 if (Common.sendEmail( to, text, subject)){
                     NotRecognizedLabel.setText("Sent to "+ sendTo +" check spam!"); 
                     InYourEmail.setText(inputUsername + " copy and paste your temporal password from " + sendTo);
-                    jDialog1.setVisible(true);
+                    setNewPassword.setVisible(true);//opens new popup to change the temporal password to a user-made
                 }
                 else{
                     NotRecognizedLabel.setText("Unexpected error, try again!"); 
@@ -446,7 +444,7 @@ public class SignUp extends javax.swing.JFrame {
 
     private void BackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButtonActionPerformed
         this.setVisible(false);
-        jDialog1.setVisible(false);
+        setNewPassword.setVisible(false);
         new Login().setVisible(true);
     }//GEN-LAST:event_BackButtonActionPerformed
 
@@ -471,7 +469,7 @@ public class SignUp extends javax.swing.JFrame {
                 ErrorLabel.setText("Your password has been changed!");
                 new Login().setVisible(true);
                 this.setVisible(false);
-                jDialog1.setVisible(false);
+                setNewPassword.setVisible(false);
             }
             else{
                 ErrorLabel.setText("Your passwords don't match");
@@ -542,7 +540,6 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JPasswordField YourPasswordField1;
     private javax.swing.JPasswordField YourPasswordField2;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -560,6 +557,7 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JDialog setNewPassword;
     private javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables
 }

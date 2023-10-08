@@ -322,9 +322,10 @@ public class Common {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(salt);
             byte[] bytes = md.digest(password.getBytes());
+            //Instead of storing it as a byte the hash is made into a string so that later on it is easier to compare hashes
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < bytes.length; i++) {
-                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));//???
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
             hash = sb.toString();
         } catch (NoSuchAlgorithmException e) {
