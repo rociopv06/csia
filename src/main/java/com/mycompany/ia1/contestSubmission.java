@@ -80,7 +80,7 @@ public class contestSubmission extends javax.swing.JFrame {
 
         warningText.setForeground(new java.awt.Color(255, 0, 0));
 
-        jLabel2.setText("Submit in PDF please!");
+        jLabel2.setText("Submit in PDF, JPG or PNG");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -150,25 +150,22 @@ public class contestSubmission extends javax.swing.JFrame {
         File f = fileGetter.getSelectedFile();
         String filePath = f.getAbsolutePath();
         byte[] documents = null;  
-        
         if(filePath.substring(filePath.length() - 4).equals(".pdf")){
             PDDocument pdfDocument;
             try {
                 pdfDocument = PDDocument.load(new File(filePath));
                 PDFRenderer pdfRenderer = new PDFRenderer(pdfDocument);
-                
-                BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);//ADD SUPPORT FOR MORE THAN ONE PAGE
+                //only supports one pdf page
+                BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 ImageIO.write(bim, "png", bos);
                 documents = bos.toByteArray();
             pdfDocument.close();
             } catch (IOException ex) {
-                Logger.getLogger(contestSubmission.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, ex);
             }
-           
         }
-
-        else{//supposedly stores any type of file
+        else{
             try {
                 File document = new File(filePath);
                 FileInputStream fis = new FileInputStream(document);
@@ -183,15 +180,18 @@ public class contestSubmission extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
+        //Retrieve all previously used titles in the same contest, this is necessay because the titles should be unique
         String query = "SELECT * FROM Submissions WHERE contestID = ?";
         String[] parameters = {Common.contestID};
         String[] columnResults = {"title"};
         String usedTitles[] = Common.SQLquery(query, parameters, columnResults, -1, null);
-        List<String> alreadyUsedTitles = Arrays.asList(usedTitles);
+        List<String> alreadyUsedTitles = Arrays.asList(usedTitles);//this allows to later use the contains property to easily search
+        //Retrieve the submissions made in this contest by the current user
         query = "SELECT * FROM Submissions WHERE contestID = ? AND username = ?";
         String[] parameters2 = {Common.contestID,Common.currentUser};
         String[] column = {"title"};
         String[] pastSubmissions = Common.SQLquery(query, parameters2, column, -1, null);
+        //Retrieve the maximun number of submissions allowed in the specific contest
         query = "SELECT * FROM Contests WHERE id = ?";
         String[] parameters3 = {Common.contestID};
         String[] column2 = {"maxSubmissions"};
@@ -203,7 +203,7 @@ public class contestSubmission extends javax.swing.JFrame {
             warningText.setText("This title is already being used");  
         }
         else if (pastSubmissions.length == Integer.parseInt(maxSubmissions[0])){
-            warningText.setText("You already submmited " + maxSubmissions[0] + " times"); 
+            warningText.setText("You already submitted " + maxSubmissions[0] + " times"); 
         }
         else{
             warningText.setText("Your submission is being processed");  

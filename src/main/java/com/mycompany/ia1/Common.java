@@ -214,30 +214,7 @@ public class Common {
         }
         return true;
     }
-    public static int[] resizeProportionally(BufferedImage img, int maxWidth, int maxHeight){
-       int originalWidth = img.getWidth();
-       int originalHeight = img.getHeight();
-       int newWidth = originalWidth;
-       int newHeight = originalHeight;
 
-    
-       double ratio = (double) originalWidth / originalHeight;
-
-       // Check if the image needs to be resized
-       if (originalWidth > maxWidth || originalHeight > maxHeight) {
-           if (ratio > 1.0) {
-               
-               newWidth = maxWidth;
-               newHeight = (int) (newWidth / ratio);
-           } else {
-               newHeight = maxHeight;
-               newWidth = (int) (newHeight * ratio);
-           }
-        }
-
-        return new int[]{newWidth, newHeight};
-
-    }
     public static LocalDate turnLocalDate(String date){
         String[] subDate = date.split("/");
 
