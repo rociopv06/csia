@@ -41,7 +41,6 @@ public class Common {
         String[] columnResults = {"name"};
         String[] empty = {};
         String[] names = Common.SQLquery(query, empty, columnResults, -1,null);
-       
         for(int i = 0; i<names.length;i++){
             query = "SELECT * FROM Contests where name = ?";
             String[] parameters = {names[i]};
@@ -69,23 +68,15 @@ public class Common {
                         String[] namesToDelete = Common.SQLquery(query, parameter, columnToDelete, -1, null);
                         updatedStatus = "voting"; //possible bug here if the date passes and then it does not update
                         for (String nameToDelete : namesToDelete) {
-                            
                             query = "SELECT * FROM Submissions WHERE title = ? AND contestID = ?";
-                            String[] answers = null;
                             String[] parameterss = {nameToDelete, contestID};
                             String[] columnResultss = {"username"};
                             String[] usernameToDelete = Common.SQLquery(query, parameterss, columnResultss, -1,null);
-                            System.out.println(nameToDelete);
-                            System.out.println(contestID);
-                            String from = "tolkiensocietyvoting@gmail.com";
-                            String password = "kbzmnzeygouygmcj";
                             query = "SELECT * FROM TolkienSociety WHERE username = ?";
                             String[] parameterss2 = {usernameToDelete[0]};
                             String[] columnResultss2 = {"email"};
                             String[] sendTo = Common.SQLquery(query, parameterss2, columnResultss2, -1,null);
-                            String to = sendTo[0];
-                            
-                            
+                            String to = sendTo[0]; 
                             String text = "Your submission "+ nameToDelete + "has been deleted from the competition for breaching the rules of the contest."
                                     + " This was decided in a democratic process that occured during the forum period of the contest you submitted to";
                             String subject = "Information about your submission to "+contestID;
@@ -113,7 +104,7 @@ public class Common {
                         String[] columnResult = {"votes", "titleSubmission"};
                         String[] parameters1 = {contestID};
                         String[] winners = Common.SQLquery(query, parameters1, columnResult,  -1, null);
-                        
+
                         if(winners[0].equals(winners[2])){
                             updatedStatus = "emergency";//possible bug here if the date passes and then it does not update
                             tiedTitles[0] = winners[1];
@@ -125,22 +116,17 @@ public class Common {
                             String[] columnResultss2 = {"email"};
                             String[] sendTo = Common.SQLquery(query, parameterss2, columnResultss2, -1,null);
                             String to = sendTo[0];
-                            
-                            
                             String text = "Please open the Tolkien Society app immediately, there is a contest with a tie that you need to break";
                             String subject = "Tie break for first place!";
                             Common.sendEmail(to, text, subject);
                         }
                         else if(winners[2].equals(winners[4])){
-                            updatedStatus = "emergency";//possible bug here if the date passes and then it does not update
-                            
+                            updatedStatus = "emergency";//possible bug here if the date passes and then it does not updated
                             query = "SELECT * FROM TolkienSociety WHERE username = ?";
                             String[] parameterss2 = {"president"};
                             String[] columnResultss2 = {"email"};
                             String[] sendTo = Common.SQLquery(query, parameterss2, columnResultss2, -1,null);
                             String to = sendTo[0];
-                            
-                            
                             String text = "Please open the Tolkien Society app immediately, there is a contest with a tie that you need to break";
                             String subject = "Tie break for second place!";
                             Common.sendEmail(to, text, subject);
@@ -217,24 +203,12 @@ public class Common {
 
     public static LocalDate turnLocalDate(String date){
         String[] subDate = date.split("/");
-
         int day = Integer.parseInt(subDate[0]);
         int month = Integer.parseInt(subDate[1]);
         int year = Integer.parseInt(subDate[2]);
-
         return(LocalDate.of(year, month, day));
     }
-    public static boolean validDates(String first,String second,String third, String fourth){
-        LocalDate currentDate = LocalDate.now();
-        LocalDate First = turnLocalDate(first);
-        LocalDate Second = turnLocalDate(second);
-        LocalDate Third = turnLocalDate(third);
-        LocalDate Fourth = turnLocalDate(fourth);
-        return (currentDate.isBefore(First) || currentDate.isEqual(First))&& First.isBefore(Second) && Second.isBefore(Third)
-                && Third.isBefore(Fourth);
-        
-        
-    }
+
     public static String[] SQLquery(String query, String[] parameters, String[] columnResults, int bytesPosition, byte[] Byte){
         PreparedStatement ps;
         ArrayList<String>  extracted = new ArrayList<>(10);
@@ -243,8 +217,10 @@ public class Common {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mysql","root", "Secure1$");
             ps = conn.prepareStatement(query);
             for (int i = 1; i<=parameters.length;i++){
-                if(i == bytesPosition){
-                    ps.setBytes(i,Byte);
+                
+                
+                if(i == bytesPosition){//it is necessary to have a byte position as a parameter because the ps.setDataType is different
+                    ps.setBytes(i,Byte);//also it is necesssary to pass Byte separately because the parameters array stores strings
                 }
                 else{
                     ps.setString(i,parameters[i-1]);
@@ -253,17 +229,18 @@ public class Common {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     for (String columnResult : columnResults) {
+                        //these are the only two columns that store bytes
                         if("salt".equals(columnResult)|| "document".equals(columnResult)){
                             byte[] Bytes = rs.getBytes(columnResult);
                             extracted.add(Base64.getEncoder().encodeToString(Bytes));
+                            //the byte gets encoded before being returned, as the function returns a String[]
                         }
-                        else{
+                        else{//if it is not a byte it has to be a string because there is no other type in the database, except for id in Contests
                             extracted.add(rs.getString(columnResult));
                         }
                     }
-
-                }
-                String[] extractedArray = extracted.toArray(String[]::new);
+                }//returning as a string[] is better tahn abstract data types
+                String[] extractedArray = extracted.toArray(String[]::new);//because it allows the code to access the extracted data with indexes
                 return(extractedArray);
             }catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
@@ -272,7 +249,6 @@ public class Common {
     }
     
     public static void SQLquery(String query, String[] parameters, int bytesPosition, byte[] Byte){
-        System.out.println("begin sql");
         PreparedStatement ps;
         try{
             Class.forName("com.mysql.cj.jdbc.Driver"); 
@@ -287,7 +263,6 @@ public class Common {
                 }
             }
             ps.executeUpdate();
-            System.out.print("updated");
             }catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
             }

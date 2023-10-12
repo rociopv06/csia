@@ -5,6 +5,7 @@
 package com.mycompany.ia1;
 
 
+import static com.mycompany.ia1.Common.turnLocalDate;
 import java.time.LocalDate;
 import java.util.Arrays;
 
@@ -688,10 +689,19 @@ public class Menu extends javax.swing.JFrame {
     private void votingStartsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_votingStartsActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_votingStartsActionPerformed
-
+    private boolean validDates(String first,String second,String third, String fourth){
+        LocalDate currentDate = LocalDate.now();//sets current date
+        LocalDate First = Common.turnLocalDate(first);
+        LocalDate Second = Common.turnLocalDate(second);
+        LocalDate Third = Common.turnLocalDate(third);
+        LocalDate Fourth = Common.turnLocalDate(fourth);
+        return (currentDate.isBefore(First) || //makes sure the starting date of the contest is in the future
+                //makes sure that no of the beggining dates for the different phases of the contest overlap
+                currentDate.isEqual(First))&& First.isBefore(Second) && Second.isBefore(Third)&& Third.isBefore(Fourth);
+    }
     private void CreateContestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateContestButtonActionPerformed
         
-        if(Common.validDates(subStart.getText(),forumStarts.getText(),votingStarts.getText(),votingEnds.getText())){
+        if(validDates(subStart.getText(),forumStarts.getText(),votingStarts.getText(),votingEnds.getText())){
         jLabel13.setText("Check that all the values are right before creating!");
         ConfirmationNameOfContest.setText("Name of contest: " + contestName.getText());
         ConfirmationSubStarts.setText("Submission start: " + subStart.getText());
