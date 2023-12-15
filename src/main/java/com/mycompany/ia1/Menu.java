@@ -74,8 +74,6 @@ public class Menu extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        linkRules = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         votingStarts = new javax.swing.JFormattedTextField();
         CreateContestButton = new javax.swing.JButton();
@@ -91,7 +89,6 @@ public class Menu extends javax.swing.JFrame {
         ConfirmationVotingEnds = new javax.swing.JLabel();
         ConfirmationSubmissions = new javax.swing.JLabel();
         ConfirmationVotes = new javax.swing.JLabel();
-        ConfirmationRulesLink = new javax.swing.JLabel();
         CreateContest = new javax.swing.JButton();
         closeConfirmation = new javax.swing.JButton();
         emergencyState = new javax.swing.JDialog();
@@ -181,8 +178,6 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel11.setText("Submissions start");
 
-        jLabel12.setText("(Optional) Link for the rules of submission:");
-
         jLabel5.setText("Format DD/MM/YYYY");
 
         votingStarts.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("d/M/yyyy"))));
@@ -260,12 +255,7 @@ public class Menu extends javax.swing.JFrame {
                                 .addGap(55, 55, 55)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(jPanel3Layout.createSequentialGroup()
-                                            .addComponent(jLabel12)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(linkRules, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(CreateContestButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                    .addComponent(CreateContestButton, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(66, 66, 66)
                         .addComponent(contestName, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -298,8 +288,6 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(jLabel10))
                 .addGap(89, 89, 89)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(linkRules, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(submissionsNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
@@ -344,8 +332,6 @@ public class Menu extends javax.swing.JFrame {
 
         ConfirmationVotes.setText("Votes per person: ");
 
-        ConfirmationRulesLink.setText("Link to rules: ");
-
         CreateContest.setBackground(new java.awt.Color(100, 254, 50));
         CreateContest.setText("Create Contest!!!");
         CreateContest.addActionListener(new java.awt.event.ActionListener() {
@@ -369,23 +355,18 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(ConfirmationRulesLink)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ConfirmationNameOfContest)
-                            .addComponent(ConfirmationForumStarts)
-                            .addComponent(ConfirmationVotingStarts)
-                            .addComponent(ConfirmationVotingEnds)
-                            .addComponent(ConfirmationSubmissions)
-                            .addComponent(ConfirmationVotes)
-                            .addComponent(ConfirmationSubStarts))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(closeConfirmation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(CreateContest, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE))
-                        .addGap(73, 73, 73))))
+                    .addComponent(ConfirmationNameOfContest)
+                    .addComponent(ConfirmationForumStarts)
+                    .addComponent(ConfirmationVotingStarts)
+                    .addComponent(ConfirmationVotingEnds)
+                    .addComponent(ConfirmationSubmissions)
+                    .addComponent(ConfirmationVotes)
+                    .addComponent(ConfirmationSubStarts))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(closeConfirmation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CreateContest, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE))
+                .addGap(73, 73, 73))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -406,13 +387,11 @@ public class Menu extends javax.swing.JFrame {
                         .addComponent(ConfirmationSubmissions)
                         .addGap(18, 18, 18)
                         .addComponent(ConfirmationVotes)
-                        .addGap(18, 18, 18))
+                        .addGap(53, 53, 53))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(CreateContest, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addComponent(ConfirmationRulesLink)
-                .addGap(18, 18, 18)
+                        .addGap(47, 47, 47)))
                 .addComponent(closeConfirmation)
                 .addContainerGap(74, Short.MAX_VALUE))
         );
@@ -562,7 +541,7 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(currentStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
                 .addComponent(jLabel15)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(383, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -621,8 +600,8 @@ public class Menu extends javax.swing.JFrame {
                         .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(next, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(displayedContest, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(277, Short.MAX_VALUE))
+                    .addComponent(displayedContest, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -710,7 +689,7 @@ public class Menu extends javax.swing.JFrame {
         ConfirmationVotingEnds.setText("Voting ends: " + votingEnds.getText());
         ConfirmationSubmissions.setText("Submissions per person: " + submissionsNumber.getSelectedItem().toString());
         ConfirmationVotes.setText("Votes per person: " + votesNumber.getSelectedItem().toString());
-        ConfirmationRulesLink.setText("Link to rules: " + linkRules.getText());
+   
         
         confirmation.setVisible(true);
         }
@@ -925,7 +904,6 @@ public class Menu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel ConfirmationForumStarts;
     private javax.swing.JLabel ConfirmationNameOfContest;
-    private javax.swing.JLabel ConfirmationRulesLink;
     private javax.swing.JLabel ConfirmationSubStarts;
     private javax.swing.JLabel ConfirmationSubmissions;
     private javax.swing.JLabel ConfirmationVotes;
@@ -947,7 +925,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -966,7 +943,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField linkRules;
     private javax.swing.JDialog newContestDialog;
     private javax.swing.JToggleButton next;
     private javax.swing.JButton presidentOnly;
