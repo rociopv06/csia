@@ -408,7 +408,7 @@ public class SignUp extends javax.swing.JFrame {
             }
             else{//send email
                 String to = sendTo;
-                String text = "Thank you for joining the Tolkien Society Voting System This is your temporal password: "+tempPassword;
+                String text = "Thank you for joining the Tolkien Society Voting System. This is your temporal password: "+tempPassword;
                 String subject = "Your temporal Tolkien Society password!";
 
                 if (Common.sendEmail( to, text, subject)){
