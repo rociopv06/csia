@@ -518,6 +518,7 @@ public class contestForum extends javax.swing.JFrame {
     private void KeepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KeepActionPerformed
         //submitVote("votesKeep");
         if(report.setVoteKeep()){
+        
             Keep.setText("Keep - "+ report.getVotesKeep());
             updateLabel.setText("Vote casted!");
         }

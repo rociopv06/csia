@@ -29,26 +29,34 @@ public class ForumReport {
         this.votesKeep= extracted[3];
         this.votesDelete = extracted[4];
         this.pass = extracted[5]; 
+        this.title = title;
     }
     public String getTitle(){
         return title;
     }
     public String getBody(){
+        setForumReport(title);
         return body;
     }
     public String getUserSubmitted(){
+        setForumReport(title);
         return userSubmitted;
     }
     public String getUserVoted(){
+        setForumReport(title);
         return userVoted;
     }
     public String getVotesKeep(){
+        setForumReport(title);
         return votesKeep;
     }
     public String getVotesDelete(){
+        setForumReport(title);
         return votesDelete;
+        
     }
     public String getPass(){
+        setForumReport(title);
         return pass;
     }
     public boolean setVoteKeep(){
@@ -56,10 +64,10 @@ public class ForumReport {
             return false;
         }
         else {
-            int votes = Integer.parseInt(votesKeep);
-            votesKeep = Integer.toString(votes++);
+            int votes = Integer.parseInt(getVotesKeep());
+            votesKeep = Integer.toString(++votes);
             String query = "UPDATE ForumReports SET votesKeep = ?, userVoted = CONCAT(COALESCE(userVoted, ''), ?) WHERE titleReport = ?";
-            String[] parameters = {votesKeep,Common.currentUser, title};
+            String[] parameters = {getVotesKeep(),Common.currentUser, title};
             Common.SQLquery(query, parameters,  -1,null);
             return true;
         
@@ -71,10 +79,10 @@ public class ForumReport {
             return false;
         }
         else {
-            int votes = Integer.parseInt(votesDelete);
-            votesDelete = Integer.toString(votes++);
+            int votes = Integer.parseInt(getVotesDelete());
+            votesDelete = Integer.toString(++votes);
             String query = "UPDATE ForumReports SET votesDelete = ?, userVoted = CONCAT(COALESCE(userVoted, ''), ?) WHERE titleReport = ?";
-            String[] parameters = {votesKeep,Common.currentUser, title};
+            String[] parameters = {getVotesDelete(),Common.currentUser, title};
             Common.SQLquery(query, parameters, -1,null);
             return true;
         
