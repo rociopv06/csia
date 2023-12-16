@@ -145,7 +145,7 @@ public class Common {
             if(!updatedStatus.equals("")){
                 query = "UPDATE Contests SET status = ? WHERE name = ? ";
                 String[] parameters2 = {updatedStatus, names[i]};
-                Common.SQLquery(query, parameters2, null, -1, null);
+                Common.SQLquery(query, parameters2, -1, null);
             }
             
         }
