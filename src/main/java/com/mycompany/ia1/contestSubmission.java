@@ -211,7 +211,7 @@ public class contestSubmission extends javax.swing.JFrame {
             String documentString = Base64.getEncoder().encodeToString(documents);
             String[] parameter = {Common.contestID, Common.currentUser,documentString, String.valueOf(Title.getText())};
             System.out.println( "length" + parameter.length);
-            Common.SQLquery(query, parameter, null, 3, documents);
+            Common.SQLquery(query, parameter,  3, documents);
             warningText.setText("Submitted!");
         }
     }//GEN-LAST:event_fileGetterActionPerformed
