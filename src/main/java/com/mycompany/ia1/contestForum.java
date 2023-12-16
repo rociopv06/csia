@@ -494,7 +494,7 @@ public class contestForum extends javax.swing.JFrame {
     }//GEN-LAST:event_backReportActionPerformed
 
     private void submitReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitReportActionPerformed
-        String statement = "INSERT INTO ForumReports (contestID,titleReport,bodyReport,userSubmitted,votesDelete,votesKeep) VALUES (?,?,?,?,?,?,?)";
+        String statement = "INSERT INTO ForumReports (contestID,titleReport,bodyReport,userSubmitted,votesDelete,votesKeep) VALUES (?,?,?,?,?,?)";
         String[] parameters = {Common.contestID, String.valueOf(titlesSubmissionsReport.getSelectedItem()), String.valueOf(bodyReportTextField.getText()),Common.currentUser,"0","0"};
         Common.SQLquery(statement, parameters, -1, null);
         jLabel4.setText("Report sent, screen will close soon!");  
