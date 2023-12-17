@@ -84,7 +84,7 @@ public class Common {
                             query = "DELETE FROM Submissions WHERE title=? AND contestID=?";
                             String[] parameters3 = {nameToDelete, contestID};
                             System.out.println("deleted all this"+ nameToDelete);
-                            Common.SQLquery(query, parameters3, null, -1, null);
+                            Common.SQLquery(query, parameters3 ,-1, null);
                             
                         }
                         query = "SELECT * FROM Submissions WHERE contestID = ?";
@@ -94,7 +94,7 @@ public class Common {
                         for(int j = 0; j<retrieved.length;j+=3){
                             query = "INSERT INTO VotesperSubmission (contestID,titleSubmission,userSubmitted,votes) VALUES (?,?,?,?)";
                             String[] parameters5 = {retrieved[j],retrieved[j+1],retrieved[j],"0"};
-                            Common.SQLquery(query, parameters5, null, -1, null);
+                            Common.SQLquery(query, parameters5 ,-1, null);
                         }
                     }
                 }
