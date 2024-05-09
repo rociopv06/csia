@@ -209,7 +209,8 @@ public class contestVoting extends javax.swing.JFrame {
             String[] parameters = {String.valueOf(titles.getSelectedItem()) , Common.contestID};
             String[] stringVotes = Common.SQLquery(query, parameters, columnResults,  -1, null);
             int votes = Integer.parseInt(stringVotes[0]);
-            stringVotes[0] = Integer.toString(votes++);
+            votes = votes +1;
+            stringVotes[0] = Integer.toString(votes);
             query = "UPDATE VotesperSubmission SET votes= ? WHERE titleSubmission = ? AND contestID = ?";
             String[] parameter2 = {stringVotes[0],String.valueOf(titles.getSelectedItem()) , Common.contestID};
             Common.SQLquery(query, parameter2, -1, null);
