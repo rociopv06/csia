@@ -379,9 +379,9 @@ public class SignUp extends javax.swing.JFrame {
         return randomPassword;
     }
     private byte[] generateSalt(){
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
+        SecureRandom random = new SecureRandom();//allows for the creation of random bytes
+        byte[] salt = new byte[16];//generate a byte array of 16 bytes
+        random.nextBytes(salt);//fill it with random bytes
         return salt;
     }
 
@@ -412,12 +412,13 @@ public class SignUp extends javax.swing.JFrame {
                 String subject = "Your temporal Tolkien Society password!";
 
                 if (Common.sendEmail( to, text, subject)){
-                    NotRecognizedLabel.setText("Sent to "+ sendTo +" check spam!"); 
+                    NotRecognizedLabel.setText("Sent to "+ sendTo +" check spam!");
+                    //reminds user of their email
                     InYourEmail.setText(inputUsername + " copy and paste your temporal password from " + sendTo);
                     setNewPassword.setVisible(true);//opens new popup to change the temporal password to a user-made
                 }
                 else{
-                    NotRecognizedLabel.setText("Unexpected error, try again!"); 
+                    NotRecognizedLabel.setText("Unexpected error, try again!"); //if email sending is unsuccessful
                 }
                     
         }

@@ -37,11 +37,13 @@ public class Common {
     public static String currentUser = "undefined";
     
     public static void updateStatus(){
+        //extract names of contest in the database
         String query = "SELECT * FROM Contests";
         String[] columnResults = {"name"};
         String[] empty = {};
         String[] names = Common.SQLquery(query, empty, columnResults, -1,null);
-        for(int i = 0; i<names.length;i++){
+        for(int i = 0; i<names.length;i++){//cycle through all contests
+            //extract the dates for the contest the loop is currently on
             query = "SELECT * FROM Contests where name = ?";
             String[] parameters = {names[i]};
             String[] columnResults2 = {"status", "startForum", "startVoting","endVoting","id"};
@@ -61,36 +63,42 @@ public class Common {
                 }
                 case "forum" -> {
                     if(!currentDate.isBefore(startVoting)){//not is after because I want true when they're equal
+                        //here the titles of the reports (titles of reported submissions) that have been voted out are extracted
                         query = "SELECT * FROM ForumReports WHERE pass = 'no'AND contestID = ?";
                         String[] columnToDelete = {"titleReport"};
                         String[] parameter = {contestID};
-                        
                         String[] namesToDelete = Common.SQLquery(query, parameter, columnToDelete, -1, null);
                         updatedStatus = "voting"; //possible bug here if the date passes and then it does not update
+                        //loop through the titles of submissions to be deleted
                         for (String nameToDelete : namesToDelete) {
+                            //retrieve the username of users who submitted a submission to be deleted
                             query = "SELECT * FROM Submissions WHERE title = ? AND contestID = ?";
                             String[] parameterss = {nameToDelete, contestID};
                             String[] columnResultss = {"username"};
                             String[] usernameToDelete = Common.SQLquery(query, parameterss, columnResultss, -1,null);
+                            //use the username to find the email
                             query = "SELECT * FROM TolkienSociety WHERE username = ?";
                             String[] parameterss2 = {usernameToDelete[0]};
                             String[] columnResultss2 = {"email"};
+                            //send an email notifying the user that their submission was deleted
                             String[] sendTo = Common.SQLquery(query, parameterss2, columnResultss2, -1,null);
                             String to = sendTo[0]; 
                             String text = "Your submission "+ nameToDelete + "has been deleted from the competition for breaching the rules of the contest."
                                     + " This was decided in a democratic process that occured during the forum period of the contest you submitted to";
                             String subject = "Information about your submission to "+contestID;
                             Common.sendEmail(to, text, subject);
+                            //delete the submission from the table
                             query = "DELETE FROM Submissions WHERE title=? AND contestID=?";
                             String[] parameters3 = {nameToDelete, contestID};
                             System.out.println("deleted all this"+ nameToDelete);
                             Common.SQLquery(query, parameters3 ,-1, null);
-                            
                         }
+                        //retrieve all submissions from the contest
                         query = "SELECT * FROM Submissions WHERE contestID = ?";
                         String[] parameters4 = {contestID};
                         String[] columns = {"contestID","title","username"};
                         String[] retrieved = Common.SQLquery(query, parameters4, columns,-1,null);
+                        //insert the submission names and users who created them into a new table that will store the votes each submission receives
                         for(int j = 0; j<retrieved.length;j+=3){
                             query = "INSERT INTO VotesperSubmission (contestID,titleSubmission,userSubmitted,votes) VALUES (?,?,?,?)";
                             String[] parameters5 = {retrieved[j],retrieved[j+1],retrieved[j],"0"};
@@ -100,17 +108,20 @@ public class Common {
                 }
                 case "voting" -> {
                     if(!currentDate.isBefore(endVoting)){//not is after because I want true when they're equal
+                        //retrieve the submissions ordered by the number of votes received
                         query = "SELECT * FROM VotesperSubmission WHERE contestID = ?  ORDER BY CONVERT(votes, UNSIGNED)";
                         String[] columnResult = {"votes", "titleSubmission"};
                         String[] parameters1 = {contestID};
                         String[] winners = Common.SQLquery(query, parameters1, columnResult,  -1, null);
-
+                        //if the first and second are tied
                         if(winners[0].equals(winners[2])){
                             updatedStatus = "emergency";//possible bug here if the date passes and then it does not update
-                            tiedTitles[0] = winners[1];
+                            tiedTitles[0] = winners[1];//store the titles of the submissions
                             tiedTitles[1] = winners[3];
+                            //send an email to the president
                             String from = "tolkiensocietyvoting@gmail.com";
                             String password = "kbzmnzeygouygmcj";
+                            //find president's email
                             query = "SELECT * FROM TolkienSociety WHERE username = ?";
                             String[] parameterss2 = {"president"};
                             String[] columnResultss2 = {"email"};
@@ -120,8 +131,12 @@ public class Common {
                             String subject = "Tie break for first place!";
                             Common.sendEmail(to, text, subject);
                         }
+                        //if the second and third are tied
                         else if(winners[2].equals(winners[4])){
                             updatedStatus = "emergency";//possible bug here if the date passes and then it does not updated
+                            tiedTitles[0] = winners[3];//store the titles of the submissions
+                            tiedTitles[1] = winners[5];
+                            //send an email to the president and get his email address
                             query = "SELECT * FROM TolkienSociety WHERE username = ?";
                             String[] parameterss2 = {"president"};
                             String[] columnResultss2 = {"email"};
@@ -130,10 +145,9 @@ public class Common {
                             String text = "Please open the Tolkien Society app immediately, there is a contest with a tie that you need to break";
                             String subject = "Tie break for second place!";
                             Common.sendEmail(to, text, subject);
-                            tiedTitles[0] = winners[3];
-                            tiedTitles[1] = winners[5];
+                        
                         }
-                        else{
+                        else{//if there is no ties the contest is finished
                             updatedStatus = "finished"; //possible bug here if the date passes and then it does not update
                         }
 
@@ -142,7 +156,8 @@ public class Common {
                 default -> {
                 }
             }
-            if(!updatedStatus.equals("")){
+            if(!updatedStatus.equals("")){//if the updatedStatus is different from its original value of ""
+                //update the contest's status in the database
                 query = "UPDATE Contests SET status = ? WHERE name = ? ";
                 String[] parameters2 = {updatedStatus, names[i]};
                 Common.SQLquery(query, parameters2, -1, null);
@@ -189,16 +204,17 @@ public class Common {
             message.setRecipient(Message.RecipientType.TO, new InternetAddress (to));
             message.setSubject(subject);
             message.setText(text);
+            //sending email
             Transport transport;
             transport = session.getTransport("smtp");
-            transport.connect(to, password);
-            transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
-            transport.close();   
+            transport.connect(to, password);//connect to server
+            transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));//send
+            transport.close();//close connection
         } catch (MessagingException ex) {
             Logger.getLogger(Common.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
-        return true;
+        return true;//to indicate the sending has been succesful
     }
 
     public static LocalDate turnLocalDate(String date){
@@ -213,67 +229,64 @@ public class Common {
         PreparedStatement ps;
         ArrayList<String>  extracted = new ArrayList<>(10);
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver"); 
+            Class.forName("com.mysql.cj.jdbc.Driver"); //open connection
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mysql","root", "Secure1$");
-            ps = conn.prepareStatement(query);
+            ps = conn.prepareStatement(query);//prepare statement
             for (int i = 1; i<=parameters.length;i++){
-                
-                
-                if(i == bytesPosition){//it is necessary to have a byte position as a parameter because the ps.setDataType is different
+                if(i == bytesPosition){//the byte position is neeeded as a parameter because the ps.setDataType is different for each type
                     ps.setBytes(i,Byte);//also it is necesssary to pass Byte separately because the parameters array stores strings
                 }
                 else{
-                    ps.setString(i,parameters[i-1]);
+                    ps.setString(i,parameters[i-1]);//set the rest as String
                 } 
             }
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
+                ResultSet rs = ps.executeQuery();//execute the query
+                while (rs.next()) {//while not all results have been extracted
                     for (String columnResult : columnResults) {
-                        //these are the only two columns that store bytes
+                        //these are the only two columns that store bytes so it is essentially checking if the rs is a byte
                         if("salt".equals(columnResult)|| "document".equals(columnResult)){
-                            byte[] Bytes = rs.getBytes(columnResult);
-                            extracted.add(Base64.getEncoder().encodeToString(Bytes));
-                            //the byte gets encoded before being returned, as the function returns a String[]
+                            byte[] Bytes = rs.getBytes(columnResult);//extract byte[]
+                            extracted.add(Base64.getEncoder().encodeToString(Bytes));//encode it into a String
                         }
                         else{//if it is not a byte it has to be a string because there is no other type in the database, except for id in Contests
                             extracted.add(rs.getString(columnResult));
                         }
                     }
-                }//returning as a string[] is better tahn abstract data types
-                String[] extractedArray = extracted.toArray(String[]::new);//because it allows the code to access the extracted data with indexes
-                return(extractedArray);
+                }//returning as a String[] is better than abstract data types because it allows the code to access the extracted data with indexes
+                String[] extractedArray = extracted.toArray(String[]::new);
+                return(extractedArray);//returns String[]
             }catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
             }
-        return null;
+        return null;//in the case of no results that matched the query null is returned
     }
     
     public static void SQLquery(String query, String[] parameters, int bytesPosition, byte[] Byte){
         PreparedStatement ps;
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver"); 
+            Class.forName("com.mysql.cj.jdbc.Driver"); //open connection
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mysql","root", "Secure1$");
-            ps = conn.prepareStatement(query);
+            ps = conn.prepareStatement(query);//prepare statement
             for (int i = 1; i<=parameters.length;i++){
-                if(i == bytesPosition){
-                    ps.setBytes(i,Byte);
+                if(i == bytesPosition){//the byte position is neeeded as a parameter because the ps.setDataType is different for each type
+                    ps.setBytes(i,Byte);//also it is necesssary to pass Byte separately because the parameters array stores strings
                 }
                 else{
-                    ps.setString(i,parameters[i-1]);
+                    ps.setString(i,parameters[i-1]);//set the rest as String
                 }
             }
-            ps.executeUpdate();
+            ps.executeUpdate();//here it is executeUpdate and not query as there is no result set
             }catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }//no return as it a void class
     }
     
     public static String hashPassword(String password, byte[] salt){
         String hash = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(salt);
-            byte[] bytes = md.digest(password.getBytes());
+            md.update(salt);//apply generated salt to SHA-256
+            byte[] bytes = md.digest(password.getBytes());//hash the bytes
             //Instead of storing it as a byte the hash is made into a string so that later on it is easier to compare hashes
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < bytes.length; i++) {
@@ -282,7 +295,7 @@ public class Common {
             hash = sb.toString();
         } catch (NoSuchAlgorithmException e) {
         }
-        return hash;
+        return hash;//return the hashed password as a String
     }
     
 }

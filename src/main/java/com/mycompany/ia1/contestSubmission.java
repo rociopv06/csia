@@ -147,40 +147,40 @@ public class contestSubmission extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void fileGetterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileGetterActionPerformed
-        File f = fileGetter.getSelectedFile();
-        String filePath = f.getAbsolutePath();
-        byte[] documents = null;  
-        if(filePath.substring(filePath.length() - 4).equals(".pdf")){
+        File f = fileGetter.getSelectedFile();//retrieve file
+        String filePath = f.getAbsolutePath();//get file's path
+        byte[] documents = null;//make a byte[] to later store the document as an array of bytes
+        if(filePath.substring(filePath.length() - 4).equals(".pdf")){//check if it is an pdf
             PDDocument pdfDocument;
             try {
-                pdfDocument = PDDocument.load(new File(filePath));
-                PDFRenderer pdfRenderer = new PDFRenderer(pdfDocument);
-                //only supports one pdf page
+                pdfDocument = PDDocument.load(new File(filePath));//load the file 
+                PDFRenderer pdfRenderer = new PDFRenderer(pdfDocument);//render
+                //only supports one pdf page which it renders as a png
                 BufferedImage bim = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                ImageIO.write(bim, "png", bos);
-                documents = bos.toByteArray();
+                ImageIO.write(bim, "png", bos);//write the png as a ByteArrayOutputStream 
+                documents = bos.toByteArray();//turn it into a byte[] and store in documents
             pdfDocument.close();
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, ex);
             }
         }
-        else{
+        else{//if it's not a pdf it is a type of image file
             try {
                 File document = new File(filePath);
                 FileInputStream fis = new FileInputStream(document);
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 byte[] buf = new byte[1024];
-
+                //write file as a ByteArrayOutputStream
                 for (int readNum; (readNum = fis.read(buf)) != -1;) {
                     bos.write(buf, 0, readNum);
                 }
-                documents = bos.toByteArray();
+                documents = bos.toByteArray();//turn it into a byte[] and store in documents
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
-        //Retrieve all previously used titles in the same contest, this is necessay because the titles should be unique
+        //Retrieve all previously used titles in the same contest since titles should be unique
         String query = "SELECT * FROM Submissions WHERE contestID = ?";
         String[] parameters = {Common.contestID};
         String[] columnResults = {"title"};
@@ -196,23 +196,23 @@ public class contestSubmission extends javax.swing.JFrame {
         String[] parameters3 = {Common.contestID};
         String[] column2 = {"maxSubmissions"};
         String[] maxSubmissions = Common.SQLquery(query, parameters3, column2,  -1, null);
-        if(String.valueOf(Title.getText()).equals("")){
+        if(String.valueOf(Title.getText()).equals("")){//check for a title
             warningText.setText("Please write a title");
         }
-        else if(alreadyUsedTitles.contains(String.valueOf(Title.getText()))){
+        else if(alreadyUsedTitles.contains(String.valueOf(Title.getText()))){//check for unique title
             warningText.setText("This title is already being used");  
         }
-        else if (pastSubmissions.length == Integer.parseInt(maxSubmissions[0])){
+        else if (pastSubmissions.length == Integer.parseInt(maxSubmissions[0])){//check for appropiate number of submissions
             warningText.setText("You already submitted " + maxSubmissions[0] + " times"); 
         }
-        else{
-            warningText.setText("Your submission is being processed");  
+        else{//if all checks passed the submission can be inserted
+            warningText.setText("Your submission is being processed"); //the program is fast so the user never reads this message 
             query = "INSERT INTO Submissions(contestID, username, document, title) VALUES (?,?,?,?)";
             String documentString = Base64.getEncoder().encodeToString(documents);
             String[] parameter = {Common.contestID, Common.currentUser,documentString, String.valueOf(Title.getText())};
             System.out.println( "length" + parameter.length);
             Common.SQLquery(query, parameter,  3, documents);
-            warningText.setText("Submitted!");
+            warningText.setText("Submitted!");//the user can now exit the page knowing their submission is stored
         }
     }//GEN-LAST:event_fileGetterActionPerformed
 
