@@ -119,8 +119,8 @@ public class Common {
                             tiedTitles[0] = winners[1];//store the titles of the submissions
                             tiedTitles[1] = winners[3];
                             //send an email to the president
-                            String from = "tolkiensocietyvoting@gmail.com";
-                            String password = "kbzmnzeygouygmcj";
+                            String from = "email";
+                            String password = "password";
                             //find president's email
                             query = "SELECT * FROM TolkienSociety WHERE username = ?";
                             String[] parameterss2 = {"president"};
